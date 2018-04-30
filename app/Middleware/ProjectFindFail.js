@@ -1,6 +1,6 @@
 'use strict';
 
-const Project = use("Project");
+const Project = use("App/Models/Project");
 
 class ProjectFindFail
 {

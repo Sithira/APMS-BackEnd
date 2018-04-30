@@ -30,4 +30,4 @@ class UserFindFail
   }
 }
 
-module.exports = UserFindFail
+module.exports = UserFindFail;

@@ -71,7 +71,7 @@ class UserController {
 
         // return the newly created user object
         return response.status(201).json({
-            result: "OK",
+            status: "OK",
             data: user
         });
 
@@ -82,10 +82,9 @@ class UserController {
      *
      * @param request
      * @param response
-     * @param params
      * @returns {Promise<*|{limit, strict, types}|Promise<any>>}
      */
-    async update({request, response, params})
+    async update({request, response})
     {
 
         // get the user from the request body.
@@ -117,13 +116,15 @@ class UserController {
     {
 
         // get the force delete parameter.
-        const { forceDestory = "false" } = request.body;
+        const { forceDestroy = "false" } = request.body;
 
         // get the user form the database
         let user = request.post().user;
 
+        let userId = user._id;
+
         // check if the request is for a soft delete or hard delete
-        if (forceDestory === "true")
+        if (forceDestroy === "false")
         {
 
             // define the deleted_at
@@ -135,12 +136,12 @@ class UserController {
             user.merge(deleteFields);
 
             // save the obj3ct in database
-            user = await user.save();
+            await user.save();
 
             // return the correct response.
             return response.status(200).json({
                 status: "OK",
-                data: user
+                data: `The user with the id: ${userId} has been successfully deleted`
             });
 
         }
@@ -151,7 +152,7 @@ class UserController {
 
             return response.status(200).json({
                 status: "OK",
-                message: `User with the id: ${user._id} has been successfully deleted.`
+                message: `User with the id: ${userId} has been successfully deleted.`
             });
         }
 

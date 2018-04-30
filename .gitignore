@@ -10,4 +10,4 @@ tmp
 # The development sqlite file
 database/development.sqlite
 
-/.idea
+.idea

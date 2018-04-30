@@ -100,10 +100,12 @@ class ProjectController
         // get the project from the request body.
         const project = request.post().project;
 
+        // check if the delete request was a force delete request
+        let projectId = project._id;
+
         // get the force delete flags.
         const { forceDestroy = "false" } = request;
 
-        // check if the delete request was a force delete request
         if (forceDestroy === "true")
         {
 
@@ -113,7 +115,7 @@ class ProjectController
             // return the response
             return response.status(200).json({
                 status: "OK",
-                message: `The project with id: ${project.id} has been force deleted.`
+                message: `The project with id: ${projectId} has been force deleted.`
             });
         }
         else
@@ -133,7 +135,7 @@ class ProjectController
             // return the response to the user.
             return response.status(200).json({
                 status: "OK",
-                message: `The project with id: ${project.id} has been deleted.`
+                message: `The project with id: ${projectId} has been deleted.`
             });
         }
 

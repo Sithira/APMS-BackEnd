@@ -59,18 +59,18 @@ Route.group(() => {
     Route.get('/:id', 'ProjectController.show')
         .middleware(['projectFindFail']);
 
+    // create new project in the database
+    Route.post('/', 'ProjectController.store')
+        .validator('ProjectStoreUpdate');
+
     // update a single project detail
     Route.patch('/:id', 'ProjectController.update')
         .middleware(['projectFindFail'])
         .validator('ProjectStoreUpdate');
 
-    // create new project in the database
-    Route.post('/', 'ProjectController.store')
-        .validator('ProjectStoreUpdate');
-
     // delete a given project ( soft or force )
     Route.delete('/:id', 'ProjectController.destroy')
-        .middleware(['ProjectFindFail']);
+        .middleware(['projectFindFail']);
 
 }).prefix('/api/v1/projects');
 

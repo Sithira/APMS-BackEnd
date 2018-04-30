@@ -14,9 +14,34 @@
 // const Factory = use('Factory')
 
 /**
-  Factory.blueprint('App/Models/User', (faker) => {
+ Factory.blueprint('App/Models/User', (faker) => {
     return {
       username: faker.username()
     }
   })
-*/
+ */
+
+const Factory = use('Factory');
+
+const Hash = use('Hash');
+
+Factory.blueprint('App/Models/User', async (faker) => {
+
+    return {
+        name: faker.name(),
+        email: faker.email(),
+        password: Hash.make("sithira")
+    }
+
+});
+
+Factory.blueprint('App/Models/Project', async (faker) => {
+
+    return {
+        name: faker.word(),
+        description: faker.paragraph(),
+        _client_id: faker.string(),
+        _team_id: faker.string(),
+    }
+
+});
