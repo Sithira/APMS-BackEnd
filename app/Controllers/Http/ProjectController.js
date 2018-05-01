@@ -104,7 +104,7 @@ class ProjectController
         let projectId = project._id;
 
         // get the force delete flags.
-        const { forceDestroy = "false" } = request;
+        const { forceDestroy = "false" } = request.all();
 
         if (forceDestroy === "true")
         {

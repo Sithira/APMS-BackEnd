@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +16,16 @@
 const Route = use('Route');
 
 Route.on('/').render('welcome');
+
+Route.get('/test', async ({request, response}) => {
+
+    const Project = use("App/Models/Project");
+
+    // let p = await Project.find("5ae71cf47b960c21c37f4e14");
+    //
+    // return await p.client().fetch();
+
+});
 
 // todo: implement admin features.
 

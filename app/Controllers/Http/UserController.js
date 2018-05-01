@@ -116,7 +116,7 @@ class UserController {
     {
 
         // get the force delete parameter.
-        const { forceDestroy = "false" } = request.body;
+        const { forceDestroy = "false" } = request.all();
 
         // get the user form the database
         let user = request.post().user;
@@ -147,40 +147,17 @@ class UserController {
         }
         else
         {
+
             // delete forever
             await user.delete();
 
+            // return the response
             return response.status(200).json({
                 status: "OK",
                 message: `User with the id: ${userId} has been successfully deleted.`
             });
         }
 
-
-    }
-
-    /**
-     * Force delete the specified resource from database.
-     *
-     * @param request
-     * @param response
-     * @param params
-     * @returns {Promise<*|{limit, strict, types}|Promise<any>>}
-     */
-    async forceDestroy({request, response, params})
-    {
-
-        // get the user from the request body
-        let user = request.post().user;
-
-        // delete the user object from the database.
-        await user.delete();
-
-        // return the user status.
-        return response.status(200).json({
-            status: "OK",
-            message: "Successfully forces deleted."
-        })
 
     }
 }

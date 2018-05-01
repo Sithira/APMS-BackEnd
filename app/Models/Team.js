@@ -29,4 +29,4 @@ class Team extends Model
 
 }
 
-module.exports = Team
+module.exports = Team;
