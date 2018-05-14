@@ -1,5 +1,5 @@
-const Validator = use('Validator')
-const Database = use('Database')
+const Validator = use('Validator');
+const Database = use('Database');
 
 const existsFn = async (data, field, message, args, get) => {
 

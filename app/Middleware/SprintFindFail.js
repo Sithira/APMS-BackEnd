@@ -4,7 +4,8 @@ const Sprint = use('App/Models/Sprint');
 
 class SprintFindFail {
 
-    async handle ({ request, response, params }, next) {
+    async handle ({ request, response, params }, next)
+    {
 
         // try to find the user from the database
         let sprint = await Sprint.find(params.sprintId);

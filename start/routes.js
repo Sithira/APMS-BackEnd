@@ -96,7 +96,8 @@ Route.group(() => {
     Route.get('/:sprintId', 'SprintController.show')
         .middleware(['sprintFindFail']);
 
-    Route.post('/', 'SprintController.store');
+    Route.post('/', 'SprintController.store')
+        .validator('SprintCreateUpdate');
 
     Route.patch('/:sprintId', 'SprintController.update')
         .middleware(['sprintFindFail']);
@@ -104,4 +105,5 @@ Route.group(() => {
     Route.delete('/:sprintId', 'SprintController.destroy')
         .middleware(['sprintFindFail']);
 
-}).prefix(BaseUrl + '/projects/:id/sprints').middleware(['projectFindFail']);
+}).prefix(BaseUrl + '/projects/:id/sprints')
+    .middleware(['projectFindFail']);

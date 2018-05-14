@@ -1,12 +1,20 @@
 'use strict';
 
-class SprintCreateUpdate {
+class SprintCreateUpdate
+{
+
   get rules ()
   {
     return {
-      // validation rules
-    }
-  }
+
+        name: "required|min:3",
+        description: "required|min:10",
+        start_date: "required|date",
+        end_date: "required|date"
+
+    };
+  };
+
 }
 
 module.exports = SprintCreateUpdate;

@@ -41,10 +41,17 @@ class SprintController {
         })
     }
 
+    /**
+     * Store a Sprint in a database.
+     *
+     * @param request
+     * @param response
+     * @return {Promise<{limit, strict, types}|any>}
+     */
     async store({request, response})
     {
 
-        let project = request.post().project;
+        let project = request.post().sprint;
 
         let sprint = await Sprint.create(request.except(['project']));
 
@@ -54,6 +61,11 @@ class SprintController {
             status: "OK",
             data: sprint
         })
+
+    }
+
+    async update({request, response})
+    {
 
     }
 
