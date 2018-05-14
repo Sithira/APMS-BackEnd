@@ -17,6 +17,8 @@ const Route = use('Route');
 
 Route.on('/').render('welcome');
 
+const BaseUrl = '/api/v1';
+
 Route.get('/test', async ({request, response}) => {
 
     const Project = use("App/Models/Project");
@@ -34,12 +36,12 @@ Route.get('/test', async ({request, response}) => {
  */
 Route.group(() => {
 
+    // get all the users
+    Route.get('/', 'UserController.index');
+
     // get a specified user from the database
     Route.get('/:id', 'UserController.show')
         .middleware(['userFindFail']);
-
-    // get all the users
-    Route.get('/', 'UserController.index');
 
     // add a new user to the database.
     Route.post('/', 'UserController.store')
@@ -55,7 +57,7 @@ Route.group(() => {
         .middleware(['userFindFail']);
 
 
-}).prefix('/api/v1/users');
+}).prefix(BaseUrl + '/users');
 
 /**
  * Project Routes.
@@ -82,5 +84,24 @@ Route.group(() => {
     Route.delete('/:id', 'ProjectController.destroy')
         .middleware(['projectFindFail']);
 
-}).prefix('/api/v1/projects');
+}).prefix(BaseUrl + '/projects');
 
+/**
+ * Project Sprint Routes.
+ */
+Route.group(() => {
+
+    Route.get('/', 'SprintController.index');
+
+    Route.get('/:sprintId', 'SprintController.show')
+        .middleware(['sprintFindFail']);
+
+    Route.post('/', 'SprintController.store');
+
+    Route.patch('/:sprintId', 'SprintController.update')
+        .middleware(['sprintFindFail']);
+
+    Route.delete('/:sprintId', 'SprintController.destroy')
+        .middleware(['sprintFindFail']);
+
+}).prefix(BaseUrl + '/projects/:id/sprints').middleware(['projectFindFail']);

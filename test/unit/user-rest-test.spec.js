@@ -83,7 +83,7 @@ test('A user can be updated via the API', async ({ client }) => {
 
 });
 
-test('A user can be soft deleted via the API', async ({ client, assert }) => {
+test('A user can be soft deleted via the API', async ({ client }) => {
 
     // send the response to the server with correctly attached ids
     const response = await client.delete('/api/v1/users/' + dummyUser.$attributes._id + '?forceDestroy=false')

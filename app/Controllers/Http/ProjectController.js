@@ -26,10 +26,11 @@ class ProjectController
     /**
      * Get the specified user from the database.
      *
+     * @param request
      * @param response
      * @return {Promise<*|{limit, strict, types}|Promise<any>>}
      */
-    async show({response})
+    async show({request, response})
     {
 
         return response.status(200).json({
