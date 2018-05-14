@@ -14,12 +14,17 @@ class SprintController {
     async index({request, response}) {
 
         // get the sprint from the request body.
-        const sprint = request.post().sprint;
+        const project = request.post().project;
+
+        // get all the sprints that belongs to a project.
+        const sprints = await Sprint.query()
+            .where('_project_id', project._id)
+            .fetch();
 
         // return the response.
         return await response.status(200).json({
             status: "OK",
-            data: sprint
+            data: sprints
         });
 
     }

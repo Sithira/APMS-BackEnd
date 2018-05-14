@@ -107,3 +107,9 @@ Route.group(() => {
 
 }).prefix(BaseUrl + '/projects/:id/sprints')
     .middleware(['projectFindFail']);
+
+Route.group(() => {
+
+    Route.get('/', 'TicketController.index');
+
+}).prefix(BaseUrl + '/project/:projectId/sprints/:sprintId/tickets');
