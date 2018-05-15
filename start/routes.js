@@ -19,15 +19,11 @@ Route.on('/').render('welcome');
 
 const BaseUrl = '/api/v1';
 
-Route.get('/test', async ({request, response}) => {
+Route.post('/test', async ({request, response}) => {
 
-    const Project = use("App/Models/Project");
+    return await {state: "OK"};
 
-    // let p = await Project.find("5ae71cf47b960c21c37f4e14");
-    //
-    // return await p.client().fetch();
-
-});
+}).validator('TicketCreateUpdate');
 
 // todo: implement admin features.
 

@@ -2,16 +2,35 @@
 
 class TicketCreateUpdate {
 
-    get rules()
-    {
+    get rules() {
         return {
-            _project_id: 'required|exists:projects,id',
-            _release_id: 'required',
-            _assignee_id: 'required|exists:users,id',
-            priority: 'required:number',
-            serverity_level: 'required',
-            description: 'required|min:6',
+            _sprint_id: 'required|exists:sprints,_id',
+            _assignee_id: 'required|exists:users,_id',
+            _version_id: 'required|exists:versions,_id',
+            ticket_type: 'required',
+            name: 'required|min:3',
+            description: 'required|min:10',
+            status: 'required|boolean',
+            priority: 'required|integer',
+            serverity_level: 'required|integer',
+
+            // validation for the ticket, if the ticket is a Epic ticket.
+            epic_sub_type: 'requiredWhen:ticket_type,EPIC',
+
+            // validation for the ticket, if the ticket is Bug ticket
+            route_cause_analysis: 'requiredWhen:ticket_type,BUG',
+            bug_sub_type: 'requiredWhen:ticket_type,BUG|exists:tickets,_id',
+            description_of_fix: 'requiredWhen:ticket_type,BUG',
+
+            // common for ticket types
+            requirement_signoff_date: 'requiredWhen:tick'
+
+
         }
+    }
+
+    get validateAll () {
+        return true
     }
 }
 
