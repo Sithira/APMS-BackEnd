@@ -53,19 +53,67 @@ class TicketController
     async store({request, response})
     {
 
-        const ticket = request.post().ticket;
+        const ticket = await Ticket.create(request.except(['project', 'sprint']));
 
-
+        return response.status(201).json({
+            status: "OK",
+            data: ticket
+        })
 
     }
 
     async update({request, response})
     {
 
+        let ticket = request.post().ticket;
+
+        ticket.merge(request.except(['project', 'sprint']));
+
+        ticket = await ticket.update();
+
+        return response.status(200).json({
+            status: "OK",
+            data: ticket
+        })
+
     }
 
     async destroy({request, response})
     {
+
+        const ticket = request.post().ticket;
+
+        let ticketId = ticket._id;
+
+        const { forceDestroy = "false"} = request.all();
+
+        if (forceDestroy === "true")
+        {
+            await ticket.delete();
+
+            return response.status(200).json({
+                status: "OK",
+                message: `The ticket with the id: ${ticketId} has been force deleted`
+            });
+        }
+        else
+        {
+
+            // set the deleted_at field
+            const softDelete = {
+                deleted_at: new Date().toISOString()
+            };
+
+            ticket.merge(softDelete);
+
+            await ticket.save();
+
+            return response.status(200).json({
+                status: "OK",
+                message: `The ticket with the id: ${ticketId} has been successfully soft deleted`
+            })
+
+        }
 
     }
 

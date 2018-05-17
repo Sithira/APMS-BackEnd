@@ -5,6 +5,12 @@ const Model = use('Model')
 class Team extends Model
 {
 
+    static get primaryKey()
+    {
+        return "_id";
+    }
+
+
     /**
      * Get all the users in a team
      *

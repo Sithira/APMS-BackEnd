@@ -5,6 +5,11 @@ const Model = use('Model');
 class Ticket extends Model
 {
 
+    static get primaryKey()
+    {
+        return "_id";
+    }
+
     /**
      * Get the projects belongs to the ticket
      *

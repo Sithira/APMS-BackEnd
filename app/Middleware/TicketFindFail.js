@@ -17,7 +17,7 @@ class TicketFindFail
             // return 400 response with the message, if the ticket does not exists.
             return response.status(400).json({
                 status: "ERROR",
-                message: `Ticket with the id of ${params.id} could not be found.`
+                message: `Ticket with the id of ${params.ticketId} could not be found.`
             });
         }
 

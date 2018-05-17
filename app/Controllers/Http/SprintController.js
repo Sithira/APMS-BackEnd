@@ -62,7 +62,7 @@ class SprintController {
 
         await project.sprint().save(sprint);
 
-        return await response.status(200).json({
+        return await response.status(201).json({
             status: "OK",
             data: sprint
         })

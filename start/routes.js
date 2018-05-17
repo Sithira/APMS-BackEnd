@@ -36,7 +36,7 @@ Route.group(() => {
     Route.get('/', 'UserController.index');
 
     // get a specified user from the database
-    Route.get('/:id', 'UserController.show')
+    Route.get('/:userId', 'UserController.show')
         .middleware(['userFindFail']);
 
     // add a new user to the database.
@@ -44,12 +44,12 @@ Route.group(() => {
         .validator('UserStoreUpdate');
 
     // update a specified user
-    Route.patch('/:id', 'UserController.update')
+    Route.patch('/:userId', 'UserController.update')
         .middleware(['userFindFail'])
         .validator('UserStoreUpdate');
 
     // delete a specified user ( soft or hard )
-    Route.delete('/:id', 'UserController.destroy')
+    Route.delete('/:userId', 'UserController.destroy')
         .middleware(['userFindFail']);
 
 
@@ -64,7 +64,7 @@ Route.group(() => {
     Route.get('/', 'ProjectController.index');
 
     // get a single project
-    Route.get('/:id', 'ProjectController.show')
+    Route.get('/:projectId', 'ProjectController.show')
         .middleware(['projectFindFail']);
 
     // create new project in the database
@@ -72,12 +72,12 @@ Route.group(() => {
         .validator('ProjectStoreUpdate');
 
     // update a single project detail
-    Route.patch('/:id', 'ProjectController.update')
+    Route.patch('/:projectId', 'ProjectController.update')
         .middleware(['projectFindFail'])
         .validator('ProjectStoreUpdate');
 
     // delete a given project ( soft or force )
-    Route.delete('/:id', 'ProjectController.destroy')
+    Route.delete('/:projectId', 'ProjectController.destroy')
         .middleware(['projectFindFail']);
 
 }).prefix(BaseUrl + '/projects');
@@ -101,11 +101,26 @@ Route.group(() => {
     Route.delete('/:sprintId', 'SprintController.destroy')
         .middleware(['sprintFindFail']);
 
-}).prefix(BaseUrl + '/projects/:id/sprints')
+}).prefix(BaseUrl + '/projects/:projectId/sprints')
     .middleware(['projectFindFail']);
 
+/**
+ * Ticket C.R.U.D Routes
+ */
 Route.group(() => {
 
     Route.get('/', 'TicketController.index');
 
-}).prefix(BaseUrl + '/project/:projectId/sprints/:sprintId/tickets');
+    Route.get('/:ticketId', 'TicketController.show')
+        .middleware(['ticketFindFail']);
+
+    Route.post('/', 'TicketController.store').validator('TicketCreateUpdate');
+
+    Route.patch('/:ticketId', 'TicketController.update')
+        .middleware(['ticketFindFail']);
+
+    Route.delete('/:ticketId', 'TicketController.destroy')
+        .middleware(['ticketFindFail']);
+
+}).prefix(BaseUrl + '/project/:projectId/sprints/:sprintId/tickets')
+    .middleware(['projectFindFail', 'sprintFindFail']);

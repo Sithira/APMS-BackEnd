@@ -5,6 +5,12 @@ const Model = use('Model');
 class Sprint extends Model
 {
 
+    static get primaryKey()
+    {
+        return "_id";
+    }
+
+
     /**
      * Get the project that the phase is belongs to.
      *

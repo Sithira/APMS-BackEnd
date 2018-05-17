@@ -9,7 +9,7 @@ class ProjectFindFail
   {
 
     // get the project from the database.
-    const project = await Project.find(params.id);
+    const project = await Project.find(params.projectId);
 
     // check for the project existence
     if (project === null)
@@ -17,7 +17,7 @@ class ProjectFindFail
         // return the error response.
         return response.status(400).json({
             status: "ERROR",
-            message: `Project with the id: ${params.id} could not be found !`
+            message: `Project with the id: ${params.projectId} could not be found !`
         });
     }
 

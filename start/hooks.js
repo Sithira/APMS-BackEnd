@@ -52,6 +52,4 @@ hooks.after.providersRegistered(() => {
     Validator.extend('requiredWhenMultiple', requiredWhenMultipleFn);
 
     Validator.extend('exists', existsFn);
-
-
 });
