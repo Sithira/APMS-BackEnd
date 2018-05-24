@@ -1,6 +1,7 @@
 'use strict';
 
 const Sprint = use('App/Models/Sprint');
+const Project = use('App/Models/Project');
 
 class SprintController {
 
@@ -56,11 +57,11 @@ class SprintController {
     async store({request, response})
     {
 
-        let project = request.post().sprint;
+        let project = request.post().project;
 
         let sprint = await Sprint.create(request.except(['project']));
 
-        await project.sprint().save(sprint);
+        await project.sprints().save(sprint);
 
         return await response.status(201).json({
             status: "OK",

@@ -45,3 +45,15 @@ Factory.blueprint('App/Models/Project', async (faker) => {
     }
 
 });
+
+
+Factory.blueprint('App/Models/Sprint', async (faker) => {
+
+    return {
+        name: faker.word(),
+        description: faker.paragraph(),
+        start_date: faker.date(),
+        end_date: faker.date()
+    }
+
+});

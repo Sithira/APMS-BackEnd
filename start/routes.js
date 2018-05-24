@@ -21,9 +21,11 @@ const BaseUrl = '/api/v1';
 
 Route.post('/test', async ({request, response}) => {
 
-    return await {state: "OK"};
+    const Project = use('App/Models/Project');
 
-}).validator('TicketCreateUpdate');
+    return await Project.with(['sprints']).first();
+
+});
 
 // todo: implement admin features.
 

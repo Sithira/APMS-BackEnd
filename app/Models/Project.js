@@ -35,7 +35,7 @@ class Project extends Model
      *
      * @return {HasMany}
      */
-    sprint()
+    sprints()
     {
         return this.hasMany('App/Models/Sprint', '_id', '_project_id')
     }

@@ -6,9 +6,13 @@ hooks.after.providersRegistered(() => {
 
     const Database = use('Database');
 
+    const ObjectID = use('mongodb').ObjectID;
+
     const existsFn = async (data, field, message, args, get) => {
 
-        const value = get(data, field);
+        const db = await Database.connect();
+
+        let value = get(data, field);
 
         if (!value) {
             /**
@@ -20,10 +24,26 @@ hooks.after.providersRegistered(() => {
 
         const [table, column] = args;
 
-        const row = await Database.collection(table).find(column, value);
+        let json = {};
 
-        if (!row) {
-            throw message
+        if (column === "_id")
+        {
+            value = new ObjectID(value);
+        }
+
+        json[column] = value;
+
+        // console.log(json);
+
+        let row = await db.collection(table).findOne(json);
+
+        // console.log(`Table: ${table} Column: ${column} - Value: ${value}`);
+        //
+        // console.log(row);
+
+        if (row === null)
+        {
+            throw message;
         }
     };
 
