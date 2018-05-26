@@ -6,7 +6,10 @@ const Factory = use('Factory');
 
 let dummyProject = null;
 
+let dummySprint = null;
+
 trait('Test/ApiClient');
+
 
 test('Add sprint to a existing project', async ({ client }) => {
 
@@ -40,12 +43,72 @@ test('Add sprint to a existing project', async ({ client }) => {
         .send(sprint.$attributes)
         .end();
 
+    dummySprint = (JSON.parse(responseSprint.text)).data;
+
     responseSprint.assertStatus(201);
 
 });
 
-test('Check for available sprints in the current project', async ({ client }) => {
+
+test('Create sprint can be fetched via the API for a given project', async ({ client }) => {
 
 
+    const response = await client.get('/api/v1/projects/' + dummyProject._id + '/sprints')
+        .end();
+
+    response.assertStatus(200);
+
+    response.assertJSONSubset({
+        data: [{
+                name: dummySprint.name
+        }]
+    });
+
+});
+
+
+test("A Sprint can be updated via the API.", async ({ client }) => {
+
+    dummySprint.name = "Some updated sprint name";
+
+    const response = await client.patch('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id)
+        .send(dummySprint)
+        .end();
+
+    response.assertStatus(200);
+
+    response.assertJSONSubset({
+        data: {
+            name: dummySprint.name
+        }
+    });
+
+});
+
+
+test('A Sprint can be soft deleted deleted via the API', async ({ client }) => {
+
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id)
+        .end();
+
+    response.assertStatus(200);
+
+    response.assertJSONSubset({
+        status: "OK"
+    });
+
+});
+
+
+test('A Sprint can be force deleted via the API', async({ client }) => {
+
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/?forceDestroy=true')
+        .end();
+
+    response.assertStatus(200);
+
+    response.assertJSONSubset({
+        status: "OK"
+    });
 
 });

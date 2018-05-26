@@ -19,7 +19,7 @@ class SprintController {
 
         // get all the sprints that belongs to a project.
         const sprints = await Sprint.query()
-            .where('_project_id', project._id)
+            .where({"_project_id": project._id})
             .fetch();
 
         // return the response.
@@ -84,7 +84,7 @@ class SprintController {
         let sprint = request.post().sprint;
 
         // swap the current details with the updated details
-        sprint.merge(request.except(['sprint']));
+        sprint.merge(request.except(['sprint', '_project_id']));
 
         // wait for the sprint to save.
         await sprint.save();

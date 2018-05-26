@@ -67,7 +67,7 @@ class TicketController
 
         let ticket = request.post().ticket;
 
-        ticket.merge(request.except(['project', 'sprint']));
+        ticket.merge(request.except(['project', 'sprint', '_project_id', '_sprint_id']));
 
         ticket = await ticket.update();
 
