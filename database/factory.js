@@ -57,3 +57,36 @@ Factory.blueprint('App/Models/Sprint', async (faker) => {
     }
 
 });
+
+
+Factory.blueprint('App/Models/Version', async (faker) => {
+
+    return {
+        name: faker.word(),
+        number: faker.integer({ min: -20, max: 20 })
+    }
+
+});
+
+Factory.blueprint('App/Models/Requirement', async (faker) => {
+
+    return {
+        name: faker.word(),
+        description: faker.paragraph()
+    }
+
+});
+
+
+Factory.blueprint('App/Models/Ticket', async (faker) => {
+
+    return {
+        ticket_type: faker.word(),
+        name: faker.word(),
+        description: faker.paragraph(),
+        status: "STATUS",
+        priority: faker.integer(),
+        serverity_level: faker.integer(),
+    }
+
+});

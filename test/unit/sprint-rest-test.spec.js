@@ -10,7 +10,6 @@ let dummySprint = null;
 
 trait('Test/ApiClient');
 
-
 test('Add sprint to a existing project', async ({ client }) => {
 
     // mock an object in the memory

@@ -98,12 +98,34 @@ Route.group(() => {
         .validator('SprintCreateUpdate');
 
     Route.patch('/:sprintId', 'SprintController.update')
-        .middleware(['sprintFindFail']);
+        .middleware(['sprintFindFail'])
+        .validator('SprintCreateUpdate');
 
     Route.delete('/:sprintId', 'SprintController.destroy')
         .middleware(['sprintFindFail']);
 
 }).prefix(BaseUrl + '/projects/:projectId/sprints')
+    .middleware(['projectFindFail']);
+
+
+Route.group(() => {
+
+    Route.get('/', 'VersionController.index');
+
+    Route.post('/', 'VersionController.store')
+        .validator(['versionCreateUpdate']);
+
+    Route.get('/:versionId', 'VersionController.show')
+        .middleware(['versionFindFail']);
+
+    Route.patch('/:versionId', 'VersionController.update')
+        .middleware(['versionFindFail'])
+        .validator('versionCreateUpdate');
+
+    Route.delete('/:versionId', 'VersionController.update')
+        .middleware(['versionFindFail']);
+
+}).prefix(BaseUrl + '/projects/:projectId/versions')
     .middleware(['projectFindFail']);
 
 /**
@@ -116,7 +138,8 @@ Route.group(() => {
     Route.get('/:ticketId', 'TicketController.show')
         .middleware(['ticketFindFail']);
 
-    Route.post('/', 'TicketController.store').validator('TicketCreateUpdate');
+    Route.post('/', 'TicketController.store')
+        .validator('TicketCreateUpdate');
 
     Route.patch('/:ticketId', 'TicketController.update')
         .middleware(['ticketFindFail']);
@@ -126,3 +149,4 @@ Route.group(() => {
 
 }).prefix(BaseUrl + '/project/:projectId/sprints/:sprintId/tickets')
     .middleware(['projectFindFail', 'sprintFindFail']);
+

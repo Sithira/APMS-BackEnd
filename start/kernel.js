@@ -40,7 +40,8 @@ const namedMiddleware = {
     userFindFail: 'App/Middleware/UserFindFail',
     projectFindFail: 'App/Middleware/ProjectFindFail',
     sprintFindFail: 'App/Middleware/SprintFindFail',
-    ticketFindFail: 'App/Middleware/TicketFindFail'
+    ticketFindFail: 'App/Middleware/TicketFindFail',
+    versionFindFail: 'App/Middleware/VersionFindFail',
 }
 
 /*
