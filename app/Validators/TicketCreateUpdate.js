@@ -32,7 +32,8 @@ class TicketCreateUpdate {
         }
     }
 
-    get validateAll () {
+    get validateAll ()
+    {
         return true
     }
 }

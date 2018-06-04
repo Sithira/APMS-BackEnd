@@ -1,8 +1,8 @@
 'use strict';
 
-const Version = use('App/Models/Version');
+const Release = use('App/Models/Release');
 
-class VersionController
+class ReleaseController
 {
 
     async index({ request, response })
@@ -10,24 +10,24 @@ class VersionController
 
         const project = request.post().project;
 
-        const versions = await Version.query()
+        const releases = await Release.query()
             .where({"_project_id": project._id})
             .fetch();
 
         return await response.json({
             status: "OK",
-            data: versions
+            data: releases
         })
 
     }
 
     async show({ request, response })
     {
-        const version = request.post().version;
+        const release = request.post().release;
 
         return await response.status(200).json({
             status: "OK",
-            data: version
+            data: release
         });
     }
 
@@ -36,13 +36,13 @@ class VersionController
 
         let project = request.post().project;
 
-        const version = await Version.create(request.except(['project']));
+        const release = await Release.create(request.except(['project']));
 
-        await project.versions().save(version);
+        await project.releases().save(release);
 
         response.status(201).json({
             status: "OK",
-            data: version
+            data: release
         });
 
     }
@@ -50,15 +50,15 @@ class VersionController
     async update({ request, response })
     {
 
-        const version = request.post().version;
+        const release = request.post().release;
 
-        version.merge(request.except(['project', '_project_id']));
+        release.merge(request.except(['project', '_project_id']));
 
-        await version.save();
+        await release.save();
 
         return await response.json({
             status: "OK",
-            data: version
+            data: release
         })
 
     }
@@ -68,16 +68,16 @@ class VersionController
 
         const { forceDestroy = "false" } = request.all();
 
-        const version = request.post().version;
+        const release = request.post().release;
 
         if (forceDestroy === "true")
         {
 
-            await version.delete();
+            await release.delete();
 
             return response.json({
                 status: "OK",
-                message: `Version with the version ID: ${versionId} has been soft deleted.`
+                message: `Release with the release ID: ${releaseId} has been soft deleted.`
             });
 
         }
@@ -88,13 +88,13 @@ class VersionController
                 deleted_at: new Date().toISOString()
             };
 
-            version.merge(softDelete);
+            release.merge(softDelete);
 
-            await version.save();
+            await release.save();
 
             return response.json({
                 status: "OK",
-                message: `Version with the version ID: ${versionId} has been soft deleted.`
+                message: `Release with the release ID: ${releaseId} has been soft deleted.`
             });
 
         }
@@ -103,4 +103,4 @@ class VersionController
 
 }
 
-module.exports = VersionController;
+module.exports = ReleaseController;

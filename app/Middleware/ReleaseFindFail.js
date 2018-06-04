@@ -1,28 +1,28 @@
 'use strict';
 
-const Version = use('App/Models/Version');
+const Release = use('App/Models/Release');
 
-class VersionFindFail
+class ReleaseFindFail
 {
 
   async handle ({ request, response, params }, next) {
 
         // try to find the user from the database
-        let version = await Version.find(params.versionId);
+        let release = await Release.find(params.releaseId);
 
         // check for the users
-        if (version === null)
+        if (release === null)
         {
 
             // return 400 response with the message, if the user does not exists.
             return response.status(400).json({
                 status: "ERROR",
-                message: `Version with the id of ${params.versionId} could not be found.`
+                message: `Release with the id of ${params.releaseId} could not be found.`
             });
         }
 
         // add the user object to the request body.
-        request.body.version = version;
+        request.body.release = release;
 
         // carry on with the request.
         await next()
@@ -30,4 +30,4 @@ class VersionFindFail
     }
 }
 
-module.exports = VersionFindFail;
+module.exports = ReleaseFindFail;

@@ -41,7 +41,7 @@ const namedMiddleware = {
     projectFindFail: 'App/Middleware/ProjectFindFail',
     sprintFindFail: 'App/Middleware/SprintFindFail',
     ticketFindFail: 'App/Middleware/TicketFindFail',
-    versionFindFail: 'App/Middleware/VersionFindFail',
+    releaseFindFail: 'App/Middleware/ReleaseFindFail',
 }
 
 /*

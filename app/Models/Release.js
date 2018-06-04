@@ -2,7 +2,7 @@
 
 const Model = use('Model');
 
-class Version extends Model
+class Release extends Model
 {
 
     static get primaryKey()
@@ -23,4 +23,4 @@ class Version extends Model
 
 }
 
-module.exports = Version;
+module.exports = Release;

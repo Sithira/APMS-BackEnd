@@ -1,6 +1,6 @@
 'use strict';
 
-class VersionCreateUpdate {
+class ReleaseCreateUpdate {
 
     get rules()
     {
@@ -16,4 +16,4 @@ class VersionCreateUpdate {
     }
 }
 
-module.exports = VersionCreateUpdate;
+module.exports = ReleaseCreateUpdate;

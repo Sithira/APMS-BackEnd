@@ -45,9 +45,9 @@ class Project extends Model
      *
      * @return {HasMany}
      */
-    versions()
+    releases()
     {
-        return this.hasMany('App/Models/Version', '_id', '_project_id');
+        return this.hasMany('App/Models/Release', '_id', '_project_id');
     }
 
     /**

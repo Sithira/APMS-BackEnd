@@ -59,7 +59,7 @@ Factory.blueprint('App/Models/Sprint', async (faker) => {
 });
 
 
-Factory.blueprint('App/Models/Version', async (faker) => {
+Factory.blueprint('App/Models/Release', async (faker) => {
 
     return {
         name: faker.word(),

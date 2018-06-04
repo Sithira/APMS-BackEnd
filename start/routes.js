@@ -110,22 +110,22 @@ Route.group(() => {
 
 Route.group(() => {
 
-    Route.get('/', 'VersionController.index');
+    Route.get('/', 'ReleaseController.index');
 
-    Route.post('/', 'VersionController.store')
-        .validator(['versionCreateUpdate']);
+    Route.post('/', 'ReleaseController.store')
+        .validator(['releaseCreateUpdate']);
 
-    Route.get('/:versionId', 'VersionController.show')
-        .middleware(['versionFindFail']);
+    Route.get('/:releaseId', 'ReleaseController.show')
+        .middleware(['releaseFindFail']);
 
-    Route.patch('/:versionId', 'VersionController.update')
-        .middleware(['versionFindFail'])
-        .validator('versionCreateUpdate');
+    Route.patch('/:releaseId', 'ReleaseController.update')
+        .middleware(['releaseFindFail'])
+        .validator('releaseCreateUpdate');
 
-    Route.delete('/:versionId', 'VersionController.update')
-        .middleware(['versionFindFail']);
+    Route.delete('/:releaseId', 'ReleaseController.update')
+        .middleware(['releaseFindFail']);
 
-}).prefix(BaseUrl + '/projects/:projectId/versions')
+}).prefix(BaseUrl + '/projects/:projectId/releases')
     .middleware(['projectFindFail']);
 
 /**
