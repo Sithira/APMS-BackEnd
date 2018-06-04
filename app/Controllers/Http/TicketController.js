@@ -53,7 +53,11 @@ class TicketController
     async store({request, response})
     {
 
+        const sprint = request.post().sprint;
+
         const ticket = await Ticket.create(request.except(['project', 'sprint']));
+
+        await sprint.tickets().save(ticket);
 
         return response.status(201).json({
             status: "OK",
@@ -67,9 +71,9 @@ class TicketController
 
         let ticket = request.post().ticket;
 
-        ticket.merge(request.except(['project', 'sprint', '_project_id', '_sprint_id']));
+        ticket.merge(request.except(['project', 'sprint']));
 
-        ticket = await ticket.update();
+        await ticket.save();
 
         return response.status(200).json({
             status: "OK",

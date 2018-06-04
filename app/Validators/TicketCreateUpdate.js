@@ -6,24 +6,24 @@ class TicketCreateUpdate {
     {
         return {
             _sprint_id: 'required|exists:sprints,_id',
-            _assignee_id: 'required|exists:users,_id',
-            _version_id: 'required|exists:versions,_id',
+            //_assignee_id: 'required|exists:users,_id',
+            //_version_id: 'required|exists:versions,_id',
             ticket_type: 'required',
             name: 'required|min:3',
             description: 'required|min:10',
             status: 'required|boolean',
             priority: 'required|integer',
-            serverity_level: 'required|integer',
+            severity_level: 'required|integer',
 
             // validation for the ticket, if the ticket is a Epic ticket.
             epic_sub_type: 'requiredWhen:ticket_type,EPIC',
 
             // validation for the ticket, if the ticket is Bug ticket
             route_cause_analysis: 'requiredWhen:ticket_type,BUG',
-            bug_sub_type: 'requiredWhen:ticket_type,BUG|exists:tickets,_id',
+            bug_sub_type: 'requiredWhen:ticket_type,BUG',
             description_of_fix: 'requiredWhen:ticket_type,BUG',
 
-            // common for ticket types
+            // common for ticket types (EPIC and STORY ONLY)
             requirement_signoff_date: 'requiredWhen:tick_type,EPIC|requiredWhen:ticket_type,STORY',
             design_review_date: 'requiredWhen:tick_type,EPIC|requiredWhen:ticket_type,STORY',
             common_test_plan: 'requiredWhen:tick_type,EPIC|requiredWhen:ticket_type,STORY',
@@ -35,6 +35,11 @@ class TicketCreateUpdate {
     get validateAll ()
     {
         return true
+    }
+
+    async fails(errorMessages)
+    {
+        return this.ctx.response.send(errorMessages);
     }
 }
 

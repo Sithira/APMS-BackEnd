@@ -50,7 +50,7 @@ Factory.blueprint('App/Models/Project', async (faker) => {
 Factory.blueprint('App/Models/Sprint', async (faker) => {
 
     return {
-        name: faker.word(),
+        name: faker.word({ length: 5 }),
         description: faker.paragraph(),
         start_date: faker.date(),
         end_date: faker.date()
@@ -62,9 +62,24 @@ Factory.blueprint('App/Models/Sprint', async (faker) => {
 Factory.blueprint('App/Models/Release', async (faker) => {
 
     return {
-        name: faker.word(),
+        name: faker.word({ length: 5 }),
         number: faker.integer({ min: -20, max: 20 })
     }
+
+});
+
+Factory.blueprint('App/Models/Ticket', async (faker) => {
+
+    return {
+
+        name: faker.word({ length: 5 }),
+        description: faker.paragraph(),
+        status: 1,
+        severity_level: faker.integer({ min: 1, max: 10 }),
+        priority: faker.integer({ min: 1, max: 10 }),
+        last_modified_date: faker.timestamp(),
+
+    };
 
 });
 

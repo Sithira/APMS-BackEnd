@@ -10,6 +10,11 @@ class Ticket extends Model
         return "_id";
     }
 
+    static get objectIDs()
+    {
+        return ['_id', '_sprint_id'];
+    }
+
     /**
      * Get the projects belongs to the ticket
      *

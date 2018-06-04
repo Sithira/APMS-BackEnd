@@ -147,6 +147,6 @@ Route.group(() => {
     Route.delete('/:ticketId', 'TicketController.destroy')
         .middleware(['ticketFindFail']);
 
-}).prefix(BaseUrl + '/project/:projectId/sprints/:sprintId/tickets')
+}).prefix(BaseUrl + '/projects/:projectId/sprints/:sprintId/tickets')
     .middleware(['projectFindFail', 'sprintFindFail']);
 

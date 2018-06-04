@@ -21,6 +21,11 @@ class Sprint extends Model
         return this.belongsTo('App/Models/Project', '_project_id', '_id');
     }
 
+    tickets()
+    {
+        return this.hasMany('App/Models/Ticket', '_id', '_sprint_id')
+    }
+
 }
 
 module.exports = Sprint;

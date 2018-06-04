@@ -10,6 +10,12 @@ class Release extends Model
         return "_id";
     }
 
+    static get objectIDs()
+    {
+        return ['_id', '_project_id'];
+    }
+
+
     /**
      * Get the version that belongs to the project
      *
