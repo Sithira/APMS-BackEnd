@@ -8,13 +8,14 @@ class ProjectController
     /**
      * Get all the projects
      *
+     * @param request
      * @param response
      * @returns {Promise<*|{limit, strict, types}|Promise<any>>}
      */
-    async index({response})
+    async index({request, response})
     {
 
-        const projects = await Project.all();
+        const projects = await request.post().projects;
 
         return response.status(200).json({
             status: "OK",

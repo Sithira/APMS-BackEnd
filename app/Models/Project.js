@@ -5,6 +5,13 @@ const Model = use('Model');
 class Project extends Model
 {
 
+    static boot()
+    {
+        super.boot();
+
+        this.addHook('beforeDelete', 'ProjectForceDelete.removeSprints');
+    }
+
     static get primaryKey()
     {
         return "_id";

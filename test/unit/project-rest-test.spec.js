@@ -73,7 +73,7 @@ test('A project can be updated via the API', async ({ client }) => {
 
 test('A project can be soft deleted vai the API', async ({ client }) => {
 
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=false')
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id)
         .end();
 
     response.assertStatus(200);
@@ -86,7 +86,7 @@ test('A project can be soft deleted vai the API', async ({ client }) => {
 
 test('A Project can be force deleted via the API', async ({ client }) => {
 
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + "/?forceDestroy=true")
         .end();
 
     response.assertStatus(200);

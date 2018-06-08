@@ -37,11 +37,21 @@ const globalMiddleware = [
 */
 const namedMiddleware = {
     auth: 'Adonis/Middleware/Auth',
+
+    // Selecting
     userFindFail: 'App/Middleware/UserFindFail',
     projectFindFail: 'App/Middleware/ProjectFindFail',
     sprintFindFail: 'App/Middleware/SprintFindFail',
     ticketFindFail: 'App/Middleware/TicketFindFail',
     releaseFindFail: 'App/Middleware/ReleaseFindFail',
+
+    // check before deletion
+    projectDeleteFail: 'App/Middleware/Deletions/ProjectDeleteFail',
+    sprintDeleteFail: 'App/Middleware/SprintDeleteFail',
+
+    // check for soft deletions
+    projectFindFailSoftDeleted: 'App/Middleware/SoftDeleted/ProjectFindFailSoftDeleted',
+    sprintFindFailSoftDeleted: 'App/Middleware/SoftDeleted/SprintFindFailSoftDeleted',
 }
 
 /*

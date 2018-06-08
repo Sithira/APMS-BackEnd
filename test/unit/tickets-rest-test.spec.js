@@ -134,7 +134,11 @@ test("A Ticket can be updated when a sprint is given", async({ client }) => {
 
 test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
 
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
+    // const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
+    //     .send(dummyTicket)
+    //     .end();
+
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
         .send(dummyTicket)
         .end();
 
@@ -142,12 +146,12 @@ test("A ticket can be soft deleted when a sprint is given", async({ client }) =>
 
 });
 
-test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
-
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
-        .send(dummyTicket)
-        .end();
-
-    response.assertStatus(200);
-
-});
+// test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
+//
+//     const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
+//         .send(dummyTicket)
+//         .end();
+//
+//     response.assertStatus(200);
+//
+// });

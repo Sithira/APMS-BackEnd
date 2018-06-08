@@ -7,11 +7,15 @@ class SprintFindFail {
     async handle ({ request, response, params }, next)
     {
 
+        const {
+            forceDestroy = "false"
+        } = request.all();
+
         // try to find the user from the database
         let sprint = await Sprint.find(params.sprintId);
 
         // check for the users
-        if (sprint === null)
+        if (sprint === null || (forceDestroy === "false" && sprint.$attributes.hasOwnProperty("deleted_at")))
         {
 
             // return 400 response with the message, if the user does not exists.

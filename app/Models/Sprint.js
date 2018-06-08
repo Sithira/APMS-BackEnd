@@ -5,6 +5,13 @@ const Model = use('Model');
 class Sprint extends Model
 {
 
+    static boot()
+    {
+        super.boot();
+
+        this.addHook('beforeDelete', 'SprintForceDelete.removeTickets');
+    }
+
     static get primaryKey()
     {
         return "_id";

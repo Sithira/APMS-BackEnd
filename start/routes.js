@@ -19,13 +19,19 @@ Route.on('/').render('welcome');
 
 const BaseUrl = '/api/v1';
 
-Route.post('/test', async ({request, response}) => {
+Route.get('/test', async ({request, response}) => {
 
-    const Project = use('App/Models/Project');
+    let projects = use('App/Models/Project');
 
-    return await Project.with(['sprints']).first();
+    return await projects
+        .with(['sprints'])
+        .sprints();
 
-});
+    response.json({
+        status: "OK"
+    })
+
+}).middleware(['projectDeleteFail']);
 
 // todo: implement admin features.
 
@@ -63,7 +69,8 @@ Route.group(() => {
 Route.group(() => {
 
     // get all the projects
-    Route.get('/', 'ProjectController.index');
+    Route.get('/', 'ProjectController.index')
+        .middleware(['projectFindFailSoftDeleted']);
 
     // get a single project
     Route.get('/:projectId', 'ProjectController.show')
@@ -80,7 +87,7 @@ Route.group(() => {
 
     // delete a given project ( soft or force )
     Route.delete('/:projectId', 'ProjectController.destroy')
-        .middleware(['projectFindFail']);
+        .middleware(['projectFindFail', 'projectDeleteFail']);
 
 }).prefix(BaseUrl + '/projects');
 
@@ -89,7 +96,8 @@ Route.group(() => {
  */
 Route.group(() => {
 
-    Route.get('/', 'SprintController.index');
+    Route.get('/', 'SprintController.index')
+        .middleware(['sprintFindFailSoftDeleted']);
 
     Route.get('/:sprintId', 'SprintController.show')
         .middleware(['sprintFindFail']);
