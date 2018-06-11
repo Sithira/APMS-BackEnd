@@ -1,0 +1,28 @@
+/api/v1/users:
+  get:
+    description: Get All Projects
+    produces:
+      - application/json
+    parameters:
+      - name: showAll
+        description: Diplay all users in the database. Deleted and non deleted
+        in: url
+        required: false
+        type: string
+  post:
+    description: Creates a Project
+    produces:
+      - application/json
+    parameters:
+      - name: user
+        description: User object
+        in:  body
+        required: true
+        type: string
+        schema:
+          $ref: '#/definitions/Project'
+    responses:
+      200:
+        description: users
+        schema:
+          $ref: '#/definitions/Project'

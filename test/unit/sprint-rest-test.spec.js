@@ -110,4 +110,13 @@ test('A Sprint can be force deleted via the API', async({ client }) => {
         status: "OK"
     });
 
+    const responseProject = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
+        .end();
+
+    responseProject.assertStatus(200);
+
+    responseProject.assertJSONSubset({
+        status: "OK"
+    });
+
 });

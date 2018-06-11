@@ -1,6 +1,6 @@
-# Adonis fullstack application
+# APMS - Advance Project Mangement System
 
-This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
+This is the BackEnd for the APM written in NodeJS using AdonisJS.
 
 1. Bodyparser
 2. Session
@@ -29,3 +29,7 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+### Todo
+1. User types and associated hooks
+2. 

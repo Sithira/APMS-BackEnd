@@ -16,11 +16,14 @@ class ProjectDeleteFail
 
         if (forceDestroy === "false")
         {
-            if (await sprints.sprints().count() >= 1)
+
+            let sprintsCount = await sprints.sprints().count();
+
+            if (sprintsCount >= 1)
             {
                 return response.status(400).json({
                     status: "ERROR",
-                    message: `You have active ${await sprints.sprints().count()} sprints on the projects.`
+                    message: `You have active ${sprintsCount} sprints on the projects.`
                 })
             }
         }

@@ -2,11 +2,12 @@
 
 const Team = use("App/Models/Team");
 
-const {validateAll} = use("Validation");
+const User = use("App/Models/User");
 
 class TeamController {
 
     // Todo: Only Admins can access this
+    // Todo: Add members for the team.
 
     /**
      * Get all the teams that are in the system.
@@ -31,28 +32,6 @@ class TeamController {
      */
     async store({request, response})
     {
-
-        // define the rules to validated against the request.
-        const rules = {
-            name: "required|min:3",
-            type: "required|min:3",
-            description: "required|min:5"
-        };
-
-        // validate the request
-        const validation = validateAll(request.all(), rules);
-
-        // if we fail to validate the request
-        if (validation.fails()) {
-
-            // then we return all errors.
-            return response.status(400).json({
-                status: "ERROR",
-                messages: validation.messages()
-            });
-
-        }
-
         // create the new team
         let team = await Team.create(request.all());
 
@@ -93,8 +72,6 @@ class TeamController {
      */
     async update({request, response})
     {
-
-        // todo: add / remove users as team members
 
         const team = request.post().team;
 
@@ -154,6 +131,79 @@ class TeamController {
                 message: `The ticket with the id: ${teamId} has been successfully soft deleted`
             })
         }
+
+    }
+
+    /**
+     * Add a user to an existing team
+     *
+     * @param request
+     * @param params
+     * @return {Promise<*>}
+     */
+    async addMember({request, response})
+    {
+
+        // get the teamId from the request body
+        let teamId = request.post().team._id;
+
+        // get the team with users in it
+        let team = await Team.with(['users']).find(teamId);
+
+        // count the number of team members
+        let teamUserCount = team.$relations.users.rows.length;
+
+        // limit the number of heads per team
+        if (teamUserCount >= 5)
+        {
+
+            // return the error message
+            return response.status(400).json({
+                status: "ERROR",
+                message: `Maximum user count for team ${team.name} of ${teamUserCount} / 05 has reached`
+            });
+        }
+
+        // get the user the request body
+        let user = request.post().user;
+
+        // add the user to the team instance (many-to-many)
+        await team.users().save(user);
+
+        // return the response
+        return response.status(200).json({
+            status: "OK",
+            data: {
+                team: team,
+                user: user
+            }
+        });
+
+    }
+
+    /**
+     * Remove a user from the team.
+     *
+     * @param request
+     * @param response
+     * @return {Promise<*>}
+     */
+    async removeMember({request, response})
+    {
+
+        // find the team with users
+        let team = await Team.with(['users']).find(request.post().team._id);
+
+        // detach the user from the team
+        await team.users().detach([request.post().user._id]);
+
+        // return the response
+        return response.status(200).json({
+            status: "OK",
+            data: {
+                team: team
+            }
+        })
 
     }
 }

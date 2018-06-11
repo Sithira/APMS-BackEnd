@@ -9,7 +9,11 @@ class Project extends Model
     {
         super.boot();
 
+        // mongoDB hook for delete associates sprints.
         this.addHook('beforeDelete', 'ProjectForceDelete.removeSprints');
+
+        // mongoDB hook for delete associated releases.
+        this.addHook('beforeDelete', 'ProjectForceDelete.removeReleases');
     }
 
     static get primaryKey()

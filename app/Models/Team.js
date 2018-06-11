@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const Model = use('Model')
+const Model = use('Model');
 
 class Team extends Model
 {
@@ -10,28 +10,30 @@ class Team extends Model
         return "_id";
     }
 
+    static get objectIDs()
+    {
+        return ['_id', '_user_id', '_team_id'];
+    }
 
     /**
-     * Get all the users in a team
+     * Get all the users in a team.
      *
-     * @returns {HasMany}
+     * @return {BelongsToMany}
      */
     users()
     {
-        return this.hasMany("App/Models/User", "_user_id", "_team_id");
+        return this.belongsToMany('App/Models/User', "_team_id", "_user_id");
     }
 
     /**
-     * Get all the phases that belongs to the phase of a project.
+     * Get all the projects that the team has assigned to.
      *
-     * @returns {HasMany}
+     * @return {HasMany}
      */
-    phases()
+    projects()
     {
-        return this.hasMany("App/Models/Phases", "_phase_id", "_team_id");
+        return this.hasMany("App/Models/Project", "_id", "_team_id");
     }
-
-
 
 }
 

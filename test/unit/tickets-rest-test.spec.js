@@ -112,7 +112,7 @@ test("A ticket exists on the given sprint", async({ client }) =>
 test("A Ticket can be updated when a sprint is given", async({ client }) => {
 
 
-    dummyTicket.name = "Updating Sprint name";
+    dummyTicket.name = "Updating Ticket name";
 
     const response = await client.patch('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
         .send(dummyTicket)
@@ -134,24 +134,38 @@ test("A Ticket can be updated when a sprint is given", async({ client }) => {
 
 test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
 
-    // const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
-    //     .send(dummyTicket)
-    //     .end();
-
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
         .send(dummyTicket)
         .end();
 
     response.assertStatus(200);
 
+    response.assertJSONSubset({
+        status: "OK"
+    });
+
 });
 
-// test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
-//
-//     const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
-//         .send(dummyTicket)
-//         .end();
-//
-//     response.assertStatus(200);
-//
-// });
+test("A ticket can be force deleted when a sprint is given", async({ client }) => {
+
+    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
+        .send(dummyTicket)
+        .end();
+
+    response.assertStatus(200);
+
+    response.assertJSONSubset({
+        status: "OK"
+    });
+
+    const responseProject = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
+        .send(dummyTicket)
+        .end();
+
+    responseProject.assertStatus(200);
+
+    responseProject.assertJSONSubset({
+        status: "OK"
+    });
+
+});

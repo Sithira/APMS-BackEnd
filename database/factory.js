@@ -30,6 +30,7 @@ Factory.blueprint('App/Models/User', async (faker) => {
     return {
         name: faker.name(),
         email: faker.email(),
+        type: "user",
         password: Hash.make("sithira")
     }
 

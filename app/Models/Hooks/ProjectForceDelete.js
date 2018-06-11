@@ -4,6 +4,12 @@ const Project = use('App/Models/Project');
 
 const ProjectForceDelete = exports = module.exports = {};
 
+/**
+ * Removes any sprints that are associated with a deleting project.
+ *
+ * @param project
+ * @return {Promise<void>}
+ */
 ProjectForceDelete.removeSprints = async (project) =>
 {
 
@@ -26,4 +32,35 @@ ProjectForceDelete.removeSprints = async (project) =>
         }
 
     }
+};
+
+/**
+ * Removes any releases associated with a deleting project.
+ *
+ * @param project
+ * @return {Promise<void>}
+ */
+ProjectForceDelete.removeReleases = async(project) =>
+{
+
+    // find the model
+    let projectQueried = await Project.with(['releases']).find(project._id);
+
+    // fetch the relationships
+    let releases = await projectQueried.releases().fetch();
+
+    // check for the array
+    if (releases.rows.length > 0)
+    {
+
+        // loop the instances
+        for (let i = 0; i < releases.rows.length; i++)
+        {
+
+            // delete the model
+            await releases.rows[i].delete();
+        }
+
+    }
+
 };

@@ -41,7 +41,8 @@ Route.get('/test', async ({request, response}) => {
 Route.group(() => {
 
     // get all the users
-    Route.get('/', 'UserController.index');
+    Route.get('/', 'UserController.index')
+        .middleware(['userFindFailSoftDeleted']);
 
     // get a specified user from the database
     Route.get('/:userId', 'UserController.show')
@@ -92,6 +93,38 @@ Route.group(() => {
 }).prefix(BaseUrl + '/projects');
 
 /**
+ * Team Routes
+ */
+Route.group(() => {
+
+    Route.get('/', 'TeamController.index')
+        .middleware(['teamFindFailSoftDeleted']);
+
+    Route.get('/:teamId', 'TeamController.show')
+        .middleware(['teamFindFail']);
+
+    Route.post('/', 'TeamController.store')
+        .validator(['TeamStoreUpdate']);
+
+    Route.get('/:teamId', 'TeamController.store')
+        .middleware(['teamFindFail']);
+
+    Route.post('/:teamId/:userId/', 'TeamController.addMember')
+        .validator(['TeamStoreUpdate'])
+        .middleware(['teamFindFail', 'userFindFail']);
+
+    Route.delete('/:teamId/:userId/', 'TeamController.removeMember')
+        .middleware(['teamFindFail', 'userFindFail']);
+
+
+
+    Route.delete('/:teamId', 'TeamController.store')
+        .middleware(['teamFindFail']);
+
+
+}).prefix(BaseUrl + '/teams');
+
+/**
  * Project Sprint Routes.
  */
 Route.group(() => {
@@ -110,12 +143,14 @@ Route.group(() => {
         .validator('SprintCreateUpdate');
 
     Route.delete('/:sprintId', 'SprintController.destroy')
-        .middleware(['sprintFindFail']);
+        .middleware(['sprintFindFail', 'sprintDeleteFail']);
 
 }).prefix(BaseUrl + '/projects/:projectId/sprints')
     .middleware(['projectFindFail']);
 
-
+/**
+ * Project Release Routes
+ */
 Route.group(() => {
 
     Route.get('/', 'ReleaseController.index');

@@ -15,10 +15,13 @@ class UserController {
      */
     async index({request, response})
     {
+
+        let users = request.post().users;
+
         // return the response
         response.status(200).json({
             result: "OK",
-            data: await User.all()
+            data: users
         })
     }
 

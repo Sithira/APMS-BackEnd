@@ -44,14 +44,17 @@ const namedMiddleware = {
     sprintFindFail: 'App/Middleware/SprintFindFail',
     ticketFindFail: 'App/Middleware/TicketFindFail',
     releaseFindFail: 'App/Middleware/ReleaseFindFail',
+    teamFindFail: 'App/Middleware/TeamFindFail',
 
     // check before deletion
     projectDeleteFail: 'App/Middleware/Deletions/ProjectDeleteFail',
-    sprintDeleteFail: 'App/Middleware/SprintDeleteFail',
+    sprintDeleteFail: 'App/Middleware/Deletions/SprintDeleteFail',
 
     // check for soft deletions
+    userFindFailSoftDeleted: 'App/Middleware/SoftDeleted/UserFindFailSoftDeleted',
     projectFindFailSoftDeleted: 'App/Middleware/SoftDeleted/ProjectFindFailSoftDeleted',
     sprintFindFailSoftDeleted: 'App/Middleware/SoftDeleted/SprintFindFailSoftDeleted',
+    teamFindFailSoftDeleted: 'App/Middleware/SoftDeleted/TeamFindFailSoftDeleted',
 }
 
 /*
