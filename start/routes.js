@@ -27,7 +27,19 @@ Route.get('/test', async ({request, response}) => {
 
 });
 
-// todo: implement admin features.
+
+Route.group(() => {
+
+    //Route.get('/', '');
+
+    Route.post('/login', 'Auth/LoginController.login');
+
+    Route.post('/logout', 'Auth/LoginController.logout');
+
+}).prefix('/auth');
+
+
+Route.get('check', 'Auth/LoginController.check');
 
 /**
  * User Routes.
@@ -85,7 +97,8 @@ Route.group(() => {
     Route.delete('/:projectId', 'ProjectController.destroy')
         .middleware(['projectFindFail', 'projectDeleteFail']);
 
-}).prefix(BaseUrl + '/projects');
+}).prefix(BaseUrl + '/projects')
+    .middleware(['auth:admin']);
 
 /**
  * Team Routes
