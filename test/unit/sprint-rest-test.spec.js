@@ -8,6 +8,10 @@ let dummyProject = null;
 
 let dummySprint = null;
 
+let dummyUser = null;
+
+let dummyTeam = null;
+
 trait('Test/ApiClient');
 
 test('Add sprint to a existing project', async ({ client }) => {
@@ -15,6 +19,36 @@ test('Add sprint to a existing project', async ({ client }) => {
     // mock an object in the memory
     const project = await Factory.model('App/Models/Project')
         .make();
+
+    // create a dummy user
+    const user = await Factory.model('App/Models/User')
+        .make();
+
+    // create an team
+    const team = await Factory.model('App/Models/Team')
+        .make();
+
+    // response for the create user
+    const responseUser = await client.post('/api/v1/users')
+        .send(user.$attributes)
+        .end();
+
+    // parse the dummyUser
+    dummyUser = (JSON.parse(responseUser.text)).data;
+
+    // add the client_id to the attributes
+    project.$attributes['_client_id'] = dummyUser._id;
+
+    // hit the API tp save the team
+    const responseTeam = await client.post('/api/v1/teams')
+        .send(team.$attributes)
+        .end();
+
+    // parse to JSON
+    dummyTeam = (JSON.parse(responseTeam.text)).data;
+
+    // append to the project attributes
+    project.$attributes['_team_id'] = dummyTeam._id;
 
     // using it's data, we send a request to the API server.
     const response = await client.post('/api/v1/projects')
@@ -46,11 +80,14 @@ test('Add sprint to a existing project', async ({ client }) => {
 
     responseSprint.assertStatus(201);
 
+    responseSprint.assertJSONSubset({
+        status: "OK"
+    });
+
 });
 
 
 test('Create sprint can be fetched via the API for a given project', async ({ client }) => {
-
 
     const response = await client.get('/api/v1/projects/' + dummyProject._id + '/sprints')
         .end();
@@ -59,7 +96,7 @@ test('Create sprint can be fetched via the API for a given project', async ({ cl
 
     response.assertJSONSubset({
         data: [{
-                name: dummySprint.name
+            name: dummySprint.name
         }]
     });
 

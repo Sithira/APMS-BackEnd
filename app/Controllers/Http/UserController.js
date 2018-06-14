@@ -119,7 +119,9 @@ class UserController {
     {
 
         // get the force delete parameter.
-        const { forceDestroy = "false" } = request.all();
+        const {
+            forceDestroy = "false",
+        } = request.all();
 
         // get the user form the database
         let user = request.post().user;

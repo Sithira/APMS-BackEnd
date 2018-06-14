@@ -7,12 +7,44 @@ class ProjectFindFailSoftDeleted
 
   async handle ({ request, response, params }, next) {
 
-      const projects = await Project.all();
+      let projects = null;
 
-      const {
-          forceDestroy="false",
-          showAll = "false"
+      let {
+          pluck = "false",
+          showAll = "false",
+          plucks
       } = request.all();
+
+      if (pluck === "true")
+      {
+
+          if (plucks === undefined || plucks == null)
+          {
+
+              projects = await Project.query().setVisible(['_id', 'name']).fetch();
+
+          }
+          else
+          {
+
+              plucks = JSON.parse(plucks);
+
+              if (plucks.length >= 1)
+              {
+                  projects = await Project.query().setVisible(plucks).fetch();
+              }
+              else
+              {
+                  projects = await Project.query().setVisible(['_id', 'name']).fetch();
+              }
+
+          }
+
+      }
+      else
+      {
+          projects = await Project.all();
+      }
 
       if (showAll === "false")
       {

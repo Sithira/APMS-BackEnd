@@ -9,20 +9,15 @@ class Team extends Model
     {
         return "_id";
     }
-
-    static get objectIDs()
-    {
-        return ['_id', '_user_id', '_team_id'];
-    }
-
+    
     /**
      * Get all the users in a team.
      *
-     * @return {BelongsToMany}
+     * @return {HasMany}
      */
     users()
     {
-        return this.belongsToMany('App/Models/User', "_team_id", "_user_id");
+        return this.hasMany('App/Models/User', "_id", "_team_id");
     }
 
     /**

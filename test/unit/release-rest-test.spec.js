@@ -6,9 +6,13 @@ const Factory = use('Factory');
 
 trait('Test/ApiClient');
 
+let dummyUser = null;
+
 let dummyProject = null;
 
 let dummyRelease = null;
+
+let dummyTeam = null;
 
 test("Add a Release to a existing project", async({ client }) => {
 
@@ -16,6 +20,35 @@ test("Add a Release to a existing project", async({ client }) => {
     const project = await Factory.model('App/Models/Project')
         .make();
 
+    // create a dummy user
+    const user = await Factory.model('App/Models/User')
+        .make();
+
+    // create an team
+    const team = await Factory.model('App/Models/Team')
+        .make();
+
+    // response for the create user
+    const responseUser = await client.post('/api/v1/users')
+        .send(user.$attributes)
+        .end();
+
+    // parse the dummyUser
+    dummyUser = (JSON.parse(responseUser.text)).data;
+
+    // add the client_id to the attributes
+    project.$attributes['_client_id'] = dummyUser._id;
+
+    // hit the API tp save the team
+    const responseTeam = await client.post('/api/v1/teams')
+        .send(team.$attributes)
+        .end();
+
+    // parse to JSON
+    dummyTeam = (JSON.parse(responseTeam.text)).data;
+
+    // append to the project attributes
+    project.$attributes['_team_id'] = dummyTeam._id;
     // using it's data, we send a request to the API server.
     const response = await client.post('/api/v1/projects')
         .send(project.$attributes)

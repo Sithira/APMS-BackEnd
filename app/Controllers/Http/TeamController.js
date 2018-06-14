@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Team = use("App/Models/Team");
 
@@ -7,7 +7,6 @@ const User = use("App/Models/User");
 class TeamController {
 
     // Todo: Only Admins can access this
-    // Todo: Add members for the team.
 
     /**
      * Get all the teams that are in the system.
@@ -15,7 +14,7 @@ class TeamController {
      * @param response
      * @returns {Promise<*|{limit, strict, types}|Promise<any>>}
      */
-    static async index({response})
+    async index({response})
     {
         return response.status(200).json({
             status: "OK",
@@ -128,7 +127,7 @@ class TeamController {
 
             return response.status(200).json({
                 status: "OK",
-                message: `The ticket with the id: ${teamId} has been successfully soft deleted`
+                message: `The team with the id: ${teamId} has been successfully soft deleted`
             })
         }
 
@@ -150,33 +149,41 @@ class TeamController {
         // get the team with users in it
         let team = await Team.with(['users']).find(teamId);
 
+        console.log(team);
+
         // count the number of team members
         let teamUserCount = team.$relations.users.rows.length;
 
         // limit the number of heads per team
-        if (teamUserCount >= 5)
+        if (teamUserCount <= 5)
         {
 
-            // return the error message
-            return response.status(400).json({
-                status: "ERROR",
-                message: `Maximum user count for team ${team.name} of ${teamUserCount} / 05 has reached`
+            // get the user the request body
+            let user = request.post().user;
+
+            if (!user.hasOwnProperty("type") && !(user.type === "admin" || user.type === "manager"))
+            {
+                // add the user to the team instance (many-to-many)
+                user.merge({_team_id: team._id, type: "user"});
+            }
+
+            await user.save();
+
+            // return the response
+            return response.status(200).json({
+                status: "OK",
+                data: {
+                    team: team,
+                    user: user
+                }
             });
+
         }
 
-        // get the user the request body
-        let user = request.post().user;
-
-        // add the user to the team instance (many-to-many)
-        await team.users().save(user);
-
-        // return the response
-        return response.status(200).json({
-            status: "OK",
-            data: {
-                team: team,
-                user: user
-            }
+        // return the error message
+        return response.status(400).json({
+            status: "ERROR",
+            message: `Maximum user count for team ${team.name} of ${teamUserCount} / 05 has reached`
         });
 
     }
@@ -194,8 +201,19 @@ class TeamController {
         // find the team with users
         let team = await Team.with(['users']).find(request.post().team._id);
 
+        let user = request.post().user;
+
+        if (!user.hasOwnProperty("type") && !(user.type === "admin" || user.type === "manager"))
+        {
+            // add the user to the team instance (many-to-many)
+            user.merge({type: "client"});
+        }
+
         // detach the user from the team
-        await team.users().detach([request.post().user._id]);
+        user._team_id = null;
+
+        // save the user.
+        await user.save();
 
         // return the response
         return response.status(200).json({

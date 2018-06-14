@@ -10,15 +10,28 @@
 |
 */
 
-const Factory = use('Factory')
+const Factory = use('Factory');
 
-class UserSeeder {
-  async run () {
+class DataSeeder
+{
+
+  async run ()
+  {
+
+    const release = await Factory.model('App/Models/Release')
+        .createMany(2);
 
     const users = await Factory.model('App/Models/User')
         .createMany(5);
 
+    const team = await Factory.model('App/Models/Team')
+        .createMany(2);
+
+    const project = await Factory.model('App/Models/Project')
+        .createMany(5);
+
   }
+
 }
 
-module.exports = UserSeeder
+module.exports = DataSeeder;

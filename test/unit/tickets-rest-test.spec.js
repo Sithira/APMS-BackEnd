@@ -4,7 +4,7 @@ const {test, trait} = use('Test/Suite')('Tickets R.E.S.T Test');
 
 const Factory = use('Factory');
 
-let dummyProject = null;
+let project = null;
 
 let dummyRelease = null;
 
@@ -12,26 +12,60 @@ let dummySprint = null;
 
 let dummyTicket = null;
 
+let dummyUser = null;
+
+let dummyTeam = null;
+
 trait('Test/ApiClient');
 
 test('A ticket can be created for a project', async ({client}) => {
 
     // create the project
-    dummyProject = await Factory.model('App/Models/Project')
+    project = await Factory.model('App/Models/Project')
         .make();
 
-    const projectResponse = await client.post('/api/v1/projects')
-        .send(dummyProject.$attributes)
+    // create a dummy user
+    const user = await Factory.model('App/Models/User')
+        .make();
+
+    // create an team
+    const team = await Factory.model('App/Models/Team')
+        .make();
+
+    // response for the create user
+    const responseUser = await client.post('/api/v1/users')
+        .send(user.$attributes)
         .end();
 
-    dummyProject = (JSON.parse(projectResponse.text)).data;
+    // parse the dummyUser
+    dummyUser = (JSON.parse(responseUser.text)).data;
+
+    // add the client_id to the attributes
+    project.$attributes['_client_id'] = dummyUser._id;
+
+    // hit the API tp save the team
+    const responseTeam = await client.post('/api/v1/teams')
+        .send(team.$attributes)
+        .end();
+
+    // parse to JSON
+    dummyTeam = (JSON.parse(responseTeam.text)).data;
+
+    // append to the project attributes
+    project.$attributes['_team_id'] = dummyTeam._id;
+
+    const projectResponse = await client.post('/api/v1/projects')
+        .send(project.$attributes)
+        .end();
+
+    project = (JSON.parse(projectResponse.text)).data;
 
     projectResponse.assertStatus(201);
 
     projectResponse.assertJSONSubset({
         status: "OK",
         data: {
-            name: dummyProject.name
+            name: project.name
         }
     });
 
@@ -39,7 +73,7 @@ test('A ticket can be created for a project', async ({client}) => {
     // dummyRelease = await Factory.model('App/Models/Release')
     //     .make();
     //
-    // const response = await client.post('/api/v1/projects/' + dummyProject._id + '/releases')
+    // const response = await client.post('/api/v1/projects/' + project._id + '/releases')
     //     .send(dummyRelease.$attributes)
     //     .end();
     //
@@ -56,7 +90,7 @@ test('A ticket can be created for a project', async ({client}) => {
     dummySprint = await Factory.model('App/Models/Sprint')
         .make();
 
-    const responseSprint = await client.post('/api/v1/projects/' + dummyProject._id + '/sprints')
+    const responseSprint = await client.post('/api/v1/projects/' + project._id + '/sprints')
         .send(dummySprint.$attributes)
         .end();
 
@@ -78,7 +112,7 @@ test('A ticket can be created for a project', async ({client}) => {
     dummyTicket.$attributes.description_of_fix = "Some fix description";
 
     const responseTicket = await client.post('/api/v1/projects/'
-        + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets')
+        + project._id + '/sprints/' + dummySprint._id + '/tickets')
         .send(dummyTicket.$attributes)
         .end();
 
@@ -95,7 +129,7 @@ test('A ticket can be created for a project', async ({client}) => {
 test("A ticket exists on the given sprint", async({ client }) =>
 {
 
-    const response = await client.get('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id)
+    const response = await client.get('/api/v1/projects/' + project._id + '/sprints/' + dummySprint._id)
         .end();
 
     response.assertStatus(200);
@@ -114,7 +148,7 @@ test("A Ticket can be updated when a sprint is given", async({ client }) => {
 
     dummyTicket.name = "Updating Ticket name";
 
-    const response = await client.patch('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
+    const response = await client.patch('/api/v1/projects/' + project._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
         .send(dummyTicket)
         .end();
 
@@ -134,7 +168,7 @@ test("A Ticket can be updated when a sprint is given", async({ client }) => {
 
 test("A ticket can be soft deleted when a sprint is given", async({ client }) => {
 
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
+    const response = await client.delete('/api/v1/projects/' + project._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id)
         .send(dummyTicket)
         .end();
 
@@ -148,7 +182,7 @@ test("A ticket can be soft deleted when a sprint is given", async({ client }) =>
 
 test("A ticket can be force deleted when a sprint is given", async({ client }) => {
 
-    const response = await client.delete('/api/v1/projects/' + dummyProject._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
+    const response = await client.delete('/api/v1/projects/' + project._id + '/sprints/' + dummySprint._id + '/tickets/' + dummyTicket._id + '/?forceDestroy=true')
         .send(dummyTicket)
         .end();
 
@@ -158,7 +192,7 @@ test("A ticket can be force deleted when a sprint is given", async({ client }) =
         status: "OK"
     });
 
-    const responseProject = await client.delete('/api/v1/projects/' + dummyProject._id + '/?forceDestroy=true')
+    const responseProject = await client.delete('/api/v1/projects/' + project._id + '/?forceDestroy=true')
         .send(dummyTicket)
         .end();
 

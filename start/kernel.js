@@ -46,6 +46,9 @@ const namedMiddleware = {
     releaseFindFail: 'App/Middleware/ReleaseFindFail',
     teamFindFail: 'App/Middleware/TeamFindFail',
 
+    //
+    teamFromBody: 'App/Middleware/TeamFindFromBody',
+
     // check before deletion
     projectDeleteFail: 'App/Middleware/Deletions/ProjectDeleteFail',
     sprintDeleteFail: 'App/Middleware/Deletions/SprintDeleteFail',

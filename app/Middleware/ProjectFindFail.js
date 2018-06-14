@@ -7,14 +7,23 @@ class ProjectFindFail {
     async handle({request, response, params}, next) {
 
         const {
-            forceDestroy = "false"
+            forceDestroy = "false",
+            relations = "false",
         } = request.all();
 
-        // get the project from the database.
-        const project = await Project.find(params.projectId);
+        let project = null;
+
+        if (relations === "true")
+        {
+            project = await Project.with(['client', 'team']).find(params.projectId);
+        }
+        else
+        {
+            project = await Project.find(params.projectId)
+        }
 
         // check for the project existence
-        if (project === null || (forceDestroy === "false" && project.$attributes.hasOwnProperty("deleted_at"))) {
+        if (project === null || project === undefined || (forceDestroy === "false" && project.$attributes.hasOwnProperty("deleted_at"))) {
             // return the error response.
             return response.status(400).json({
                 status: "ERROR",

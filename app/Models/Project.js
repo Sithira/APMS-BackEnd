@@ -21,6 +21,11 @@ class Project extends Model
         return "_id";
     }
 
+    static get objectIDs()
+    {
+        return ['_id', '_client_id', 'team_id'];
+    }
+
     /**
      * Return the manager that belong to the project
      *
@@ -59,6 +64,11 @@ class Project extends Model
     releases()
     {
         return this.hasMany('App/Models/Release', '_id', '_project_id');
+    }
+
+    team()
+    {
+        return this.hasOne('App/Models/Team', '_team_id', '_id');
     }
 
     /**

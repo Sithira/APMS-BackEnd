@@ -21,17 +21,11 @@ const BaseUrl = '/api/v1';
 
 Route.get('/test', async ({request, response}) => {
 
-    let projects = use('App/Models/Project');
+    let TeamUser = use('App/Models/TeamUser');
 
-    return await projects
-        .with(['sprints'])
-        .sprints();
+    return await TeamUser.with(['user', 'team', 'projects']).find("5b20afd100854933b9414bcb")
 
-    response.json({
-        status: "OK"
-    })
-
-}).middleware(['projectDeleteFail']);
+});
 
 // todo: implement admin features.
 
@@ -79,11 +73,12 @@ Route.group(() => {
 
     // create new project in the database
     Route.post('/', 'ProjectController.store')
+        .middleware(['teamFromBody'])
         .validator('ProjectStoreUpdate');
 
     // update a single project detail
     Route.patch('/:projectId', 'ProjectController.update')
-        .middleware(['projectFindFail'])
+        .middleware(['projectFindFail', 'teamFromBody'])
         .validator('ProjectStoreUpdate');
 
     // delete a given project ( soft or force )
@@ -106,19 +101,13 @@ Route.group(() => {
     Route.post('/', 'TeamController.store')
         .validator(['TeamStoreUpdate']);
 
-    Route.get('/:teamId', 'TeamController.store')
-        .middleware(['teamFindFail']);
-
     Route.post('/:teamId/:userId/', 'TeamController.addMember')
-        .validator(['TeamStoreUpdate'])
         .middleware(['teamFindFail', 'userFindFail']);
 
     Route.delete('/:teamId/:userId/', 'TeamController.removeMember')
         .middleware(['teamFindFail', 'userFindFail']);
 
-
-
-    Route.delete('/:teamId', 'TeamController.store')
+    Route.delete('/:teamId', 'TeamController.destroy')
         .middleware(['teamFindFail']);
 
 
@@ -129,8 +118,8 @@ Route.group(() => {
  */
 Route.group(() => {
 
-    Route.get('/', 'SprintController.index')
-        .middleware(['sprintFindFailSoftDeleted']);
+    Route.get('/', 'SprintController.index');
+        //.middleware(['sprintFindFailSoftDeleted']);
 
     Route.get('/:sprintId', 'SprintController.show')
         .middleware(['sprintFindFail']);

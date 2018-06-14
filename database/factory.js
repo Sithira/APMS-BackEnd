@@ -25,6 +25,14 @@ const Factory = use('Factory');
 
 const Hash = use('Hash');
 
+Factory.blueprint('App/Models/Team', async (faker) => {
+
+    return {
+        name: faker.name()
+    }
+
+});
+
 Factory.blueprint('App/Models/User', async (faker) => {
 
     return {
@@ -41,8 +49,6 @@ Factory.blueprint('App/Models/Project', async (faker) => {
     return {
         name: faker.word(),
         description: faker.paragraph(),
-        _client_id: faker.string(),
-        _team_id: faker.string(),
     }
 
 });

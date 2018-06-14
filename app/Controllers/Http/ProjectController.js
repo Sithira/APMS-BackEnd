@@ -54,6 +54,15 @@ class ProjectController
         // create the new project in the database.
         const project = await Project.create(request.all());
 
+        // get the team
+        let team = request.post().team;
+
+        // add the project to the team
+        team.merge({_project_id: project._id});
+
+        // save the team
+        await team.save();
+
         // return the response with the newly created data
         return response.status(201).json({
             status: "OK",

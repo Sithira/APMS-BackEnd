@@ -6,6 +6,10 @@ const Factory = use('Factory');
 
 let dummyProject = null;
 
+let dummyUser  = null;
+
+let dummyTeam = null;
+
 trait('Test/ApiClient');
 
 test("All projects can be fetched via the API", async ({ client }) => {
@@ -31,11 +35,42 @@ test('A new project can be created via the API', async ({client}) => {
     const project = await Factory.model('App/Models/Project')
         .make();
 
+    // create a dummy user
+    const user = await Factory.model('App/Models/User')
+        .make();
+
+    // create an team
+    const team = await Factory.model('App/Models/Team')
+        .make();
+
+    // response for the create user
+    const responseUser = await client.post('/api/v1/users')
+        .send(user.$attributes)
+        .end();
+
+    // parse the dummyUser
+    dummyUser = (JSON.parse(responseUser.text)).data;
+
+    // add the client_id to the attributes
+    project.$attributes['_client_id'] = dummyUser._id;
+
+    // hit the API tp save the team
+    const responseTeam = await client.post('/api/v1/teams')
+        .send(team.$attributes)
+        .end();
+
+    // parse to JSON
+    dummyTeam = (JSON.parse(responseTeam.text)).data;
+
+    // append to the project attributes
+    project.$attributes['_team_id'] = dummyTeam._id;
+
     // using it's data, we send a request to the API server.
     const response = await client.post('/api/v1/projects')
         .send(project.$attributes)
         .end();
 
+    // convert the project to JSON
     dummyProject = (JSON.parse(response.text)).data;
 
     // status of 201 will be return upon success
