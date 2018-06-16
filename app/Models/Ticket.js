@@ -12,7 +12,7 @@ class Ticket extends Model
 	
 	static get objectIDs()
 	{
-		return ['_id', '_sprint_id', '_assignee_id'];
+		return ['_id', '_sprint_id', '_assignee_id', '_release_id'];
 	}
 	
 	/**
