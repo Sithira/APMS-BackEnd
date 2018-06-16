@@ -82,6 +82,11 @@ class User extends Model
         return this.hasMany('App/Models/Project', '_id', '_manager_id');
     }
 
+    tickets()
+    {
+        return this.hasMany('App/Models/Ticket', '_id', '_assignee_id')
+    }
+    
 }
 
 module.exports = User;

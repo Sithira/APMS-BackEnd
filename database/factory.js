@@ -39,7 +39,7 @@ Factory.blueprint('App/Models/User', async (faker) => {
         name: faker.name(),
         email: faker.email(),
         type: "user",
-        password: Hash.make("sithira")
+        password: "sithira123"
     }
 
 });
