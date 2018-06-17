@@ -15,13 +15,8 @@ class TicketController
 	async index({request, response})
 	{
 		
-		// get the sprint because ticket belongs to a sprint
-		const sprint = request.post().sprint;
-		
 		// get all tickets from the database.
-		const tickets = await Ticket.query()
-			.where('_sprint_id', sprint._id)
-			.fetch();
+		const tickets = request.post().tickets;
 		
 		// return the details
 		return response.status(200).json({

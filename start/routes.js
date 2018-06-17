@@ -17,7 +17,8 @@ const Route = use('Route');
 
 const BaseUrl = '/api/v1';
 
-Route.get('/', async({request, response}) => {
+Route.get('/', async ({request, response}) =>
+{
 	return response.status(200).json({
 		status: "OK",
 		message: "Hi, Welcome to APMS-BackEnd. To use our services, please use /api/{current-version} end points.",
@@ -25,19 +26,27 @@ Route.get('/', async({request, response}) => {
 	})
 });
 
-Route.get(BaseUrl, async({request, response}) => {
+Route.get(BaseUrl, async ({request, response}) =>
+{
 	return response.status(302).json({
 		status: "ERROR",
 		message: 'Please refer /docs for API documentation'
 	});
 });
 
-Route.get('/test', async ({request, response}) =>
+Route.get('/test', async ({request, response, auth}) =>
 {
+	//const TeamUser = use('App/Models/TeamUser');
 	
-	let TeamUser = use('App/Models/TeamUser');
+	const User = use('App/Models/User');
 	
-	return await TeamUser.with(['user', 'team', 'projects']).find("5b20afd100854933b9414bcb")
+	let user = await User.with(['team', 'team.projects', 'team.projects.manager']).find('5b25ebc92e7a6e0b64117256');
+	
+	//console.log(Object.getOwnPropertyNames(User.prototype));
+	
+	//let user = await TeamUser.with(['team', 'team.users', 'team.projects']).find("5b25d033fba25708df52cd7c");
+	
+	return response.json(user);
 	
 });
 
@@ -98,7 +107,7 @@ Route.group(() =>
 	
 	// get a single project
 	Route.get('/:projectId', 'ProjectController.show')
-		.middleware(['projectFindFail', 'auth_project:client,manager,developer']);
+		.middleware(['projectFindFail', 'auth_project:client,developer,manager']);
 	
 	// create new project in the database
 	Route.post('/', 'ProjectController.store')
@@ -151,8 +160,8 @@ Route.group(() =>
 Route.group(() =>
 {
 	
-	Route.get('/', 'SprintController.index');
-	//.middleware(['sprintFindFailSoftDeleted']);
+	Route.get('/', 'SprintController.index')
+		.middleware(['sprintFindFailSoftDeleted']);
 	
 	Route.get('/:sprintId', 'SprintController.show')
 		.middleware(['sprintFindFail']);
@@ -200,7 +209,8 @@ Route.group(() =>
 Route.group(() =>
 {
 	
-	Route.get('/', 'TicketController.index');
+	Route.get('/', 'TicketController.index')
+		.middleware(['ticketFindFailSoftDeleted']);
 	
 	Route.get('/:ticketId', 'TicketController.show')
 		.middleware(['ticketFindFail', 'auth_ticket']);

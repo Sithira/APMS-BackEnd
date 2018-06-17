@@ -17,12 +17,7 @@ class SprintController
 	{
 		
 		// get the sprint from the request body.
-		const project = request.post().project;
-		
-		// get all the sprints that belongs to a project.
-		const sprints = await Sprint.query()
-			.where({"_project_id": project._id})
-			.fetch();
+		const sprints = request.post().sprints;
 		
 		// return the response.
 		return await response.status(200).json({

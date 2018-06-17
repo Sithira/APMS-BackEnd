@@ -38,8 +38,6 @@ class SprintFindFail
 		// add the user object to the request body.
 		request.body.sprint = sprint;
 		
-		//console.log("Passing from middleware...");
-		
 		// carry on with the request.
 		await next()
 		

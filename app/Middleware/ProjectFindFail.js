@@ -17,7 +17,7 @@ class ProjectFindFail
 		
 		if (relations === "true")
 		{
-			project = await Project.with(['client', 'team']).find(params.projectId);
+			project = await Project.with(['client', 'team', 'manager']).find(params.projectId);
 		}
 		else
 		{

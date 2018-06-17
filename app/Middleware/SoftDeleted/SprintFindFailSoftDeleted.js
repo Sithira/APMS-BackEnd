@@ -8,20 +8,28 @@ class SprintFindFailSoftDeleted
 	async handle({request, response, params}, next)
 	{
 		
+		let project = request.post().project,
+		sprints = [];
+		
+		await project.load('sprints');
+		
 		const {
 			showAll = "false"
 		} = request.all();
 		
-		let sprints = await Sprint.all();
+		if (project.$relations.sprints !== null)
+		{
+			sprints = project.$relations.sprints.rows;
+		}
 		
 		if (showAll === "false")
 		{
-			for (let i = 0; i < sprints.rows.length; i++)
+			for (let i = 0; i < sprints.length; i++)
 			{
 				
 				if (sprints[i].$attributes.hasOwnProperty("deleted_at"))
 				{
-					sprints.rows.splice(i, 1);
+					sprints[i].splice(i, 1);
 				}
 			}
 		}

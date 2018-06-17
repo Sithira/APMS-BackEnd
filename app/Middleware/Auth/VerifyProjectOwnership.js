@@ -8,7 +8,6 @@ class VerifyProjectOwnership
 {
 	async handle({request, response, auth}, next, props)
 	{
-		
 		// get the authenticated user
 		let user = await auth.getUser();
 		
@@ -54,11 +53,15 @@ class VerifyProjectOwnership
 			}
 			
 			// check if the auth is the client of the project
-			if (user.type === "client" || (props.indexOf("client") !== -1))
+			if (user.type === "client" && (props.indexOf("client") !== -1))
 			{
+			
+				console.log("CLIENT");
+				
 				// check if the project's client is the person is authentication
 				if (user._id.toString() !== project._client_id.toString())
 				{
+					
 					return response.status(403).json({
 						status: "ERROR",
 						type: "client",
@@ -70,13 +73,14 @@ class VerifyProjectOwnership
 					// continue to the next request
 					return await next();
 				}
+
 			}
-			
+
 			// check if the user if a developer of the project
-			if (user.type === "developer" || (props.indexOf("developer") !== -1))
+			if (user.type === "developer" && (props.indexOf("developer") !== -1))
 			{
 				
-				user = await User.with(['team']).find(user._id);
+				user = await User.with(['team', 'team.projects']).find(user._id);
 				
 				if (user.$relations.team === null)
 				{
@@ -89,14 +93,14 @@ class VerifyProjectOwnership
 				else
 				{
 					
-					let projects = await Team.with(['projects']).find(user._team_id);
+					let projects = await user.$relations.team.$relations.projects.rows;
 					
 					let bool = false;
 					
-					for (let i = 0; i < projects.$relations.projects.rows.length; i++)
+					for (let i = 0; i < projects.length; i++)
 					{
 						
-						if (projects.$relations.projects.rows[i]._id.toString() === project._id.toString())
+						if (projects[i]._id.toString() === project._id.toString())
 						{
 							bool = true;
 						}
@@ -121,7 +125,7 @@ class VerifyProjectOwnership
 			}
 			
 			// check if the auth is a manager of the project
-			if (user.type === "manager" || (props.indexOf("manager") !== -1))
+			if (user.type === "manager" && (props.indexOf("manager") !== -1))
 			{
 				if (user._id.toString() !== project._manager_id.toString())
 				{
@@ -134,9 +138,17 @@ class VerifyProjectOwnership
 			}
 			
 		}
+		else
+		{
+			return await next();
+		}
 		
 		// to the next part of the request
-		await next();
+		return response.status(403).json({
+			status: "ERROR",
+			type: "ILLEGAL_USER_TYPE",
+			message: "User type does not match any roles. Please contact admins"
+		})
 		
 	}
 }

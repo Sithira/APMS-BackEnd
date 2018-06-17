@@ -1,7 +1,9 @@
 'use strict'
 
-const Hash = use('Hash')
-const Model = use('Model')
+const Hash = use('Hash'),
+	Model = use('Model'),
+	Team = use('App/Models/Team');
+
 
 class User extends Model
 {
@@ -52,7 +54,7 @@ class User extends Model
 	 */
 	tokens()
 	{
-		return this.hasMany('App/Models/Token')
+		return this.hasMany('App/Models/Token', '_id', '_user_id')
 	}
 	
 	/**
@@ -85,6 +87,11 @@ class User extends Model
 		return this.hasMany('App/Models/Project', '_id', '_manager_id');
 	}
 	
+	/**
+	 * Get the tickets that belongs to the user
+	 *
+	 * @return {HasMany}
+	 */
 	tickets()
 	{
 		return this.hasMany('App/Models/Ticket', '_id', '_assignee_id')

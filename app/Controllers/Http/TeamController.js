@@ -15,11 +15,16 @@ class TeamController
 	 * @param response
 	 * @returns {Promise<*|{limit, strict, types}|Promise<any>>}
 	 */
-	async index({response})
+	async index({request, response})
 	{
+		
+		// get the team from the body
+		let teams = request.post().teams;
+		
+		// return th response
 		return response.status(200).json({
 			status: "OK",
-			data: await Team.all()
+			data: teams
 		});
 	}
 	
@@ -145,12 +150,9 @@ class TeamController
 	{
 		
 		// get the teamId from the request body
-		let teamId = request.post().team._id;
+		let team = request.post().team;
 		
-		// get the team with users in it
-		let team = await Team.with(['users']).find(teamId);
-		
-		console.log(team);
+		await team.load('users');
 		
 		// count the number of team members
 		let teamUserCount = team.$relations.users.rows.length;
@@ -166,9 +168,10 @@ class TeamController
 			{
 				// add the user to the team instance (many-to-many)
 				user.merge({_team_id: team._id, type: "user"});
+				
+				// save the user
+				await user.save();
 			}
-			
-			await user.save();
 			
 			// return the response
 			return response.status(200).json({

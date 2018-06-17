@@ -10,14 +10,16 @@ class ProjectDeleteFail
 			forceDestroy = "false"
 		} = request.all();
 		
-		let projectId = request.post().project._id;
+		let project = request.post().project;
 		
-		let sprints = await Project.with(['sprints']).find(projectId);
+		await project.load('sprints');
+		
+		let sprints = project.$relations.sprints.rows;
 		
 		if (forceDestroy === "false")
 		{
 			
-			let sprintsCount = await sprints.sprints().count();
+			let sprintsCount = sprints.length;
 			
 			if (sprintsCount >= 1)
 			{

@@ -39,11 +39,11 @@ class Project extends Model
 	/**
 	 * Get the client for the project
 	 *
-	 * @return {BelongsTo}
+	 * @return {HasOne}
 	 */
 	client()
 	{
-		return this.belongsTo("App/Models/User", "_client_id", "_id");
+		return this.hasOne("App/Models/User", "_client_id", "_id");
 	}
 	
 	/**

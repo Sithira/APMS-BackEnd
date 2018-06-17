@@ -35,9 +35,11 @@ class UserController
 	 */
 	async show({request, response})
 	{
+		const user = request.post().user;
+		
 		return response.json({
 			status: "OK",
-			data: request.post().user
+			data: user
 		});
 	}
 	
@@ -50,25 +52,6 @@ class UserController
 	 */
 	async store({request, response})
 	{
-		
-		// // define the validation rules for incoming request
-		// const rules = {
-		//     name: 'required|min:3',
-		//     email: 'required|email',
-		//     password: 'required|min:8'
-		// };
-		//
-		// // validate the request
-		// const validator = await validateAll(request.all(), rules);
-		//
-		// // check for validation errors
-		// if (validator.fails())
-		// {
-		//     return response.status(400).json({
-		//         result: "ERROR",
-		//         data: validator.messages()
-		//     })
-		// }
 		
 		// create the new user
 		const user = await User.create(request.all());

@@ -64,6 +64,7 @@ const namedMiddleware = {
 	userFindFailSoftDeleted: 'App/Middleware/SoftDeleted/UserFindFailSoftDeleted',
 	projectFindFailSoftDeleted: 'App/Middleware/SoftDeleted/ProjectFindFailSoftDeleted',
 	sprintFindFailSoftDeleted: 'App/Middleware/SoftDeleted/SprintFindFailSoftDeleted',
+	ticketFindFailSoftDeleted: 'App/Middleware/SoftDeleted/TicketFindFailSoftDeleted',
 	teamFindFailSoftDeleted: 'App/Middleware/SoftDeleted/TeamFindFailSoftDeleted',
 }
 

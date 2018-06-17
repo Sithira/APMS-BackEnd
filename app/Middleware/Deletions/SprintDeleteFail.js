@@ -12,19 +12,21 @@ class SprintDeleteFail
 			forceDestroy = "false"
 		} = request.all();
 		
-		let sprintId = request.post().sprint._id;
+		let sprint = request.post().sprint;
 		
-		let tickets = await Sprint.with(['tickets']).find(sprintId);
+		await sprint.load('tickets');
+		
+		let tickets = sprint.$relations.tickets.rows;
 		
 		if (forceDestroy === "false")
 		{
-			const ticketCount = await tickets.tickets().count();
+			const ticketCount = tickets.length;
 			
 			if (ticketCount >= 1)
 			{
 				return response.status(400).json({
 					status: "ERROR",
-					message: `You have active ${ticketCount} tickets on the sprints`
+					message: `You have active ${ticketCount} tickets on the sprint`
 				})
 			}
 		}

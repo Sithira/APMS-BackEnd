@@ -18,31 +18,54 @@ class DataSeeder
 	async run()
 	{
 		
-		const release = await Factory.model('App/Models/Release')
-			.createMany(2);
-		
 		const users = await Factory.model('App/Models/User')
 			.createMany(5);
 		
-		const team = await Factory.model('App/Models/Team')
-			.createMany(2);
-		
-		const project = await Factory.model('App/Models/Project')
-			.createMany(5);
-		
-		for (let i = 0; i < 5; i++)
+		for (let i = 0; i < 2; i++)
 		{
+			const team = await Factory.model('App/Models/Team')
+				.create();
+			
+			users[i].merge({_team_id: team._id});
+			
+			await users[i].save();
+			
+			const project = await Factory.model('App/Models/Project')
+				.create();
+			
+			project.merge({_team_id: team._id});
+			
+			await project.save();
+			
+			for (let j = 0; j < 2; j++)
+			{
+				
+				const release = await Factory.model('App/Models/Release')
+					.make();
+				
+				await project.releases().save(release);
+				
+			}
+			
 			
 			for (let j = 0; j < 2; j++)
 			{
 				let sprint = await Factory.model('App/Models/Sprint').create();
 				
-				await project[i].sprints().save(sprint);
+				await project.sprints().save(sprint);
+				
+				for (let k = 0; k < 3; k++)
+				{
+					const ticket = await Factory.model('App/Models/Ticket').create();
+					
+					await sprint.tickets().save(ticket);
+					
+				}
+				
 			}
 			
 		}
 		
-		const tickets = await Factory.model('App/Models/Ticket').createMany(5);
 		
 	}
 	
