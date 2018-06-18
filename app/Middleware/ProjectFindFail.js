@@ -17,7 +17,7 @@ class ProjectFindFail
 		
 		if (relations === "true")
 		{
-			project = await Project.with(['client', 'team', 'manager']).find(params.projectId);
+			project = await Project.with(['client', 'team', 'team.users', 'manager']).find(params.projectId);
 		}
 		else
 		{
@@ -28,7 +28,7 @@ class ProjectFindFail
 		if (project === null || project === undefined || (forceDestroy === "false" && project.$attributes.hasOwnProperty("deleted_at")))
 		{
 			// return the error response.
-			return response.status(400).json({
+			return response.status(404).json({
 				status: "ERROR",
 				message: `Project with the id: ${params.projectId} could not be found !`
 			});

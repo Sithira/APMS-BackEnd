@@ -44,7 +44,7 @@ class VerifyTicket
 				// if the manager is null, current auth'ed user
 				if (project.$relations.manager === null)
 				{
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						message: `You don't have enough permissions to do the requested action`
 					});
@@ -53,7 +53,7 @@ class VerifyTicket
 				// if the auth'ed user is not the project manager
 				if (user._id.toString() !== project.$relations.manager._id.toString())
 				{
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						message: `You don't have enough permissions to do the requested action`
 					})
@@ -81,7 +81,7 @@ class VerifyTicket
 			
 			if (!ticketFound)
 			{
-				return response.status(403).json({
+				return response.status(401).json({
 					status: "ERROR",
 					message: `You don't have permissions to access this ticket.`
 				})

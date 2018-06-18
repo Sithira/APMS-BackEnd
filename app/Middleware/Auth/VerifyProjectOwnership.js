@@ -28,7 +28,7 @@ class VerifyProjectOwnership
 				// check for the manager property
 				if (!project.hasOwnProperty("_manager_id"))
 				{
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						type: "manager",
 						message: `Unauthorized, You don't have required permissions to perform these actions`
@@ -38,7 +38,7 @@ class VerifyProjectOwnership
 				// let admins and project managers to edit the project.
 				if (user._id.toString() !== project._manager_id.toString())
 				{
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						type: "manager",
 						message: `Unauthorized, You don't have required permissions to perform these actions`
@@ -62,7 +62,7 @@ class VerifyProjectOwnership
 				if (user._id.toString() !== project._client_id.toString())
 				{
 					
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						type: "client",
 						message: `Unauthorized. You don't have permissions to access this content`
@@ -85,7 +85,7 @@ class VerifyProjectOwnership
 				if (user.$relations.team === null)
 				{
 					
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						message: `Unauthorized. You don't have permissions to access this content`
 					});
@@ -109,7 +109,7 @@ class VerifyProjectOwnership
 					if (!bool)
 					{
 						
-						return response.status(403).json({
+						return response.status(401).json({
 							status: "ERROR",
 							message: `Unauthorized. You don't have permissions to access this content`
 						});
@@ -129,7 +129,7 @@ class VerifyProjectOwnership
 			{
 				if (user._id.toString() !== project._manager_id.toString())
 				{
-					return response.status(403).json({
+					return response.status(401).json({
 						status: "ERROR",
 						type: "manager",
 						message: `Unauthorized, You don't have required permissions to perform these actions`
@@ -144,7 +144,7 @@ class VerifyProjectOwnership
 		}
 		
 		// to the next part of the request
-		return response.status(403).json({
+		return response.status(401).json({
 			status: "ERROR",
 			type: "ILLEGAL_USER_TYPE",
 			message: "User type does not match any roles. Please contact admins"

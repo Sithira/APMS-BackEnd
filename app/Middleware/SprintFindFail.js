@@ -29,7 +29,7 @@ class SprintFindFail
 		if (sprint === null || sprint === undefined || (forceDestroy === "false" && sprint.$attributes.hasOwnProperty("deleted_at")))
 		{
 			// return 400 response with the message, if the user does not exists.
-			return response.status(400).json({
+			return response.status(404).json({
 				status: "ERROR",
 				message: `Sprint with the id of ${params.sprintId} could not be found.`
 			});

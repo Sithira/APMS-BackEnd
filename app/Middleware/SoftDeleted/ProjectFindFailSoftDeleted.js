@@ -7,6 +7,12 @@ class ProjectFindFailSoftDeleted
 	
 	async handle({request, response, params, auth}, next)
 	{
+		
+		let {
+			showAll = "false",
+		} = request.all();
+		
+		
 		let projects = null;
 		
 		let user = await auth.getUser();
@@ -17,23 +23,22 @@ class ProjectFindFailSoftDeleted
 		if (user.type.toString() === "admin")
 		{
 			projects = await Project.all();
+			
+			projects = await projects.rows;
 		}
 		else
 		{
 			projects = user.$relations.team.$relations.projects.rows;
 		}
 		
-		let {
-			showAll = "false",
-		} = request.all();
-		
 		if (showAll === "false")
 		{
+			
 			for (let i = 0; i < projects.length; i++)
 			{
+				
 				if (projects[i].$attributes.hasOwnProperty("deleted_at"))
 				{
-					
 					projects.splice(i, 1);
 					
 				}

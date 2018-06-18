@@ -15,13 +15,15 @@ class VerifyAuthentication
 			// if the user isn't an admin, check for the rest
 			if (user.type !== "admin")
 			{
+				console.log("WFT ??");
+				
 				// if we have a prop for admin
 				if (props.indexOf("admin") !== -1)
 				{
 					
 					if (user.type !== "admin")
 					{
-						return response.status(403).json({
+						return response.status(401).json({
 							status: "ERROR",
 							type: "admin",
 							message: "You don't have required permissions"
@@ -34,7 +36,7 @@ class VerifyAuthentication
 				{
 					if (user.type !== "manager")
 					{
-						return response.status(403).json({
+						return response.status(401).json({
 							status: "ERROR",
 							type: "manager",
 							message: "You don't have required permissions"
@@ -47,7 +49,7 @@ class VerifyAuthentication
 				{
 					if (user.type !== "developer")
 					{
-						return response.status(403).json({
+						return response.status(401).json({
 							status: "ERROR",
 							type: "developer",
 							message: "You don't have required permissions"
@@ -60,7 +62,7 @@ class VerifyAuthentication
 				{
 					if (user.type !== "client")
 					{
-						return response.status(403).json({
+						return response.status(401).json({
 							status: "ERROR",
 							type: "client",
 							message: "You don't have required permissions"
@@ -70,11 +72,13 @@ class VerifyAuthentication
 			}
 			
 			// return for the next action.
-			await next();
+			return await next();
 		}
 		catch (error)
 		{
-			return response.status(403).json({
+			console.log(error);
+			
+			return response.status(401).json({
 				status: "ERROR",
 				message: "Missing, Invalid or expired token. Please Re-Login"
 			});

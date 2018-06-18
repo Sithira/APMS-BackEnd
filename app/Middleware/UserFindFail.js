@@ -40,7 +40,7 @@ class UserFindFail
 		{
 			
 			// return 400 response with the message, if the user does not exists.
-			return response.status(400).json({
+			return response.status(404).json({
 				status: "ERROR",
 				message: `User with the id of ${params.userId} could not be found.`
 			});

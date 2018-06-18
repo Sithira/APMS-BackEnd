@@ -13,7 +13,7 @@ class TeamFindFromBody
 		
 		if (_team_id === undefined || _team_id === null)
 		{
-			return response.status(400).json({
+			return response.status(404).json({
 				status: 'ERROR',
 				message: `No TeamId found.`
 			});
@@ -21,9 +21,9 @@ class TeamFindFromBody
 		
 		let team = await Team.find(_team_id);
 		
-		if (team.$attributes.hasOwnProperty("deleted_at"))
+		if (team === null && team.$attributes.hasOwnProperty("deleted_at"))
 		{
-			return response.status(400).json({
+			return response.status(404).json({
 				status: 'ERROR',
 				message: `No with team id: ${_team_id} has been removed or does not exists`
 			});

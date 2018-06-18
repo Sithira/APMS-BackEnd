@@ -1,35 +1,31 @@
 # APMS - Advance Project Mangement System
 
-This is the BackEnd for the APM written in NodeJS using AdonisJS.
+This is the BackEnd for the APMS written in NodeJS using AdonisJS.
 
-1. Bodyparser
-2. Session
-3. Authentication
-4. Web security middleware
-5. CORS
-6. Edge template engine
-7. Lucid ORM
-8. Migrations and seeds
+1. User management
+2. Project management
+3. Project sprint management
+4. Ticket Management
 
 ## Setup
 
-Use the adonis command to install the blueprint
+use adoins command to download all the dependencies
 
 ```bash
-adonis new yardstick
+adonis install
 ```
 
 or manually clone the repo and then run `npm install`.
 
 
-### Migrations
+### Running the server
 
-Run the following command to run startup migrations.
+For production usages for the APMS-BackEnd please run
 
 ```js
-adonis migration:run
+server --watch
 ```
-
-### Todo
-1. User types and associated hooks
-2. 
+or for development purposes
+```js
+adonis serve --dev
+```

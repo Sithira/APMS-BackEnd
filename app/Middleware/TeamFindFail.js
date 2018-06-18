@@ -20,6 +20,7 @@ class TeamFindFail
 		{
 			// load the relationship with users.
 			team = await Team.with(['users', 'projects']).find(params.teamId);
+
 		}
 		else
 		{
@@ -29,7 +30,7 @@ class TeamFindFail
 		// check if the team exists or team has been soft deleted
 		if (team === null || team.$attributes.hasOwnProperty("deleted_at"))
 		{
-			return response.status(400).json({
+			return response.status(404).json({
 				status: "ERROR",
 				message: `A Team with id ${params.teamId} could not be found.`
 			});

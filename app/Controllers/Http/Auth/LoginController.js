@@ -1,5 +1,7 @@
 'use strict';
 
+const User = use('App/Models/User');
+
 class LoginController
 {
 	
@@ -20,6 +22,8 @@ class LoginController
 			password
 		} = request.all();
 		
+		let user = await User.findByOrFail('email', email);
+		
 		// exchange an access_token for email and password
 		let payLoad = await auth
 			.withRefreshToken()
@@ -28,7 +32,10 @@ class LoginController
 		// return the response
 		return response.status(200).json({
 			status: "OK",
-			data: payLoad
+			data: {
+				user: user,
+				payLoad
+			}
 		});
 		
 	}
