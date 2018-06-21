@@ -28,6 +28,7 @@
     "@adonisjs/shield": "^1.0.6",
     "@adonisjs/validator": "^5.0.3",
     "@adonisjs/vow": "^1.0.15",
+    "adonis-acl": "^1.1.0",
     "adonis-swagger": "^1.2.7",
     "lucid-mongo": "^3.0.9"
   },
