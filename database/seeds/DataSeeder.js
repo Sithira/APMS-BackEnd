@@ -34,6 +34,8 @@ class DataSeeder
 				.create();
 			
 			project.merge({_team_id: team._id});
+			project.merge({_client_id: users[(i + 3)]._id});
+			project.merge({_manager_id: users[(i + 1)]._id});
 			
 			await project.save();
 			
