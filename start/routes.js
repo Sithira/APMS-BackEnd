@@ -36,19 +36,11 @@ Route.get(BaseUrl, async ({request, response}) =>
 
 Route.get('/test', async ({request, response, auth}) =>
 {
-	//const TeamUser = use('App/Models/TeamUser');
-	
-	const User = use('App/Models/User');
-	
-	let user = await User.with(['team', 'team.projects', 'team.projects.manager']).find('5b25ebc92e7a6e0b64117256');
-	
-	//console.log(Object.getOwnPropertyNames(User.prototype));
-	
-	//let user = await TeamUser.with(['team', 'team.users', 'team.projects']).find("5b25d033fba25708df52cd7c");
+	const user = await auth.getUser();
 	
 	return response.json(user);
 	
-});
+}).middleware(['auth:jwt', 'is:(admin && !moderator)']);
 
 
 Route.group(() =>
@@ -124,7 +116,7 @@ Route.group(() =>
 		.middleware(['projectFindFail', 'projectDeleteFail', 'auth_project:manager']);
 	
 }).prefix(BaseUrl + '/projects')
-	.middleware(['auth']);
+	.middleware(['auth:jwt']);
 
 /**
  * Team Routes

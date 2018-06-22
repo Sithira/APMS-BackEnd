@@ -8,6 +8,13 @@ const Hash = use('Hash'),
 class User extends Model
 {
 	
+	static get traits () {
+		return [
+			'@provider:Adonis/Acl/HasRole',
+			'@provider:Adonis/Acl/HasPermission'
+		]
+	}
+	
 	static get hidden()
 	{
 		return ['password']
@@ -41,6 +48,8 @@ class User extends Model
 		
 		this.addHook('beforeDelete', 'UserForceDeleteHook.removeProjects');
 	}
+	
+
 	
 	/**
 	 * A relationship on tokens is required for auth to
@@ -96,6 +105,11 @@ class User extends Model
 	{
 		return this.hasMany('App/Models/Ticket', '_id', '_assignee_id')
 	}
+	
+	// roles()
+	// {
+	// 	return this.belongsToMany('Adonis/Acl/Role')
+	// }
 	
 }
 

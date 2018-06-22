@@ -15,7 +15,9 @@ const globalMiddleware = [
 	'Adonis/Middleware/BodyParser',
 	'Adonis/Middleware/Session',
 	'Adonis/Middleware/Shield',
-	'Adonis/Middleware/AuthInit'
+	'Adonis/Middleware/AuthInit',
+	'Adonis/Acl/Init'
+
 ]
 
 /*
@@ -38,7 +40,11 @@ const globalMiddleware = [
 const namedMiddleware = {
 	
 	// authenticate middleware
-	auth: 'App/Middleware/Auth/VerifyAuthentication',
+	//auth: 'App/Middleware/Auth/VerifyAuthentication',
+	auth: 'Adonis/Middleware/Auth',
+	
+	is: 'Adonis/Acl/Is',
+	can: 'Adonis/Acl/Can',
 	
 	// ownership and role based middleware
 	auth_project: 'App/Middleware/Auth/VerifyProjectOwnership',
