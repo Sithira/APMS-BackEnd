@@ -11,6 +11,7 @@
 */
 
 const Factory = use('Factory');
+const Role = use('Role');
 
 class DataSeeder
 {
@@ -20,6 +21,14 @@ class DataSeeder
 		
 		const users = await Factory.model('App/Models/User')
 			.createMany(5);
+		
+		const admin = await Role.create({
+			name: "admin",
+			slug: "admin",
+			description: "Admin actions"
+		});
+		
+		await users[0].roles().attach([admin._id]);
 		
 		for (let i = 0; i < 2; i++)
 		{
