@@ -2,30 +2,64 @@
 
 const User = use('App/Models/User');
 
+const _ = use('underscore');
+
 class UserFindFailSoftDeleted
 {
 	async handle({request}, next)
 	{
 		
+		let {
+			showAll = "false",
+			pluck = "false",
+			type = null
+		} = request.all();
+		
 		// get all the users from the database
 		let users = await User.all();
 		
-		let {
-			showAll = "false",
-		} = request.all();
+		users = users.toJSON();
 		
 		// if we need to see soft deleted users
 		if (showAll === "false")
 		{
-			for (let i = 0; i < users.rows.length; i++)
+			for (let i = 0; i < users.length; i++)
 			{
-				if (users.rows[i].$attributes.hasOwnProperty("deleted_at"))
+				if (users[i].hasOwnProperty("deleted_at"))
 				{
 					
-					users.rows.splice(i, 1);
+					users.splice(i, 1);
 					
 				}
 			}
+		}
+		
+		
+		// filter the user type from the array
+		if (type !== null)
+		{
+			users = _.where(users, {
+				type: type
+			});
+		}
+		
+		// pluck _id and name from the array
+		if (pluck === "true")
+		{
+			users = _.map(users, (user, key) =>
+			{
+				
+				if (showAll === "false")
+				{
+					users.slice(key);
+				}
+
+				return {
+					_id: user._id,
+					name: user.name
+				};
+				
+			});
 		}
 		
 		request.body.users = users;
@@ -35,4 +69,4 @@ class UserFindFailSoftDeleted
 	}
 }
 
-module.exports = UserFindFailSoftDeleted
+module.exports = UserFindFailSoftDeleted;

@@ -81,7 +81,7 @@ class SprintController
 		let sprint = request.post().sprint;
 		
 		// swap the current details with the updated details
-		sprint.merge(request.except(['sprint', '_project_id', 'relations']));
+		sprint.merge(request.except(['_project_id', 'tickets', 'project']));
 		
 		// wait for the sprint to save.
 		await sprint.save();

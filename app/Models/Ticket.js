@@ -35,6 +35,16 @@ class Ticket extends Model
 		return this.belongsTo('App/Models/User', '_assignee_id', '_id');
 	}
 	
+	/**
+	 * Get the release that the ticket belongs to
+	 *
+	 * @return {BelongsTo}
+	 */
+	release()
+	{
+		return this.belongsTo('App/Models/Release', '_release_id', '_id');
+	}
+	
 }
 
 module.exports = Ticket;

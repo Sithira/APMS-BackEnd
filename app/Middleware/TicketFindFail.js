@@ -17,7 +17,7 @@ class TicketFindFail
 		
 		if (relations === "true")
 		{
-			ticket = await Ticket.with(['assignee', 'sprint']).find(params.ticketId);
+			ticket = await Ticket.with(['assignee', 'sprint', 'release']).find(params.ticketId);
 		}
 		else
 		{

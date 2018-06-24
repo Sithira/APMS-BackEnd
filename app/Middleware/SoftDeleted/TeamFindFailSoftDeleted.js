@@ -2,6 +2,8 @@
 
 const Team = use('App/Models/Team');
 
+const _ = use('underscore');
+
 class TeamFindFailSoftDeleted
 {
 	
@@ -9,23 +11,41 @@ class TeamFindFailSoftDeleted
 	{
 		
 		const {
-			showAll = "false"
+			showAll = "false",
+			pluck = "false"
 		} = request.all();
 		
 		let teams = await Team.all();
 		
+		teams = teams.toJSON();
+		
 		if (showAll === "false")
 		{
-			for (let i = 0; i < teams.rows.length; i++)
+			for (let i = 0; i < teams.length; i++)
 			{
 				
-				if (teams.rows[i].$attributes.hasOwnProperty("deleted_at"))
+				if (teams[i].hasOwnProperty("deleted_at"))
 				{
 					
-					teams.rows.splice(i, 1);
+					teams.splice(i, 1);
 					
 				}
 			}
+		}
+		
+		if (pluck === "true")
+		{
+			teams = _.map(teams, (team) => {
+				
+				if (!team.hasOwnProperty("deleted_at"))
+				{
+					return {
+						_id: team._id,
+						name: team.name
+					};
+				}
+				
+			});
 		}
 		
 		request.body.teams = teams;

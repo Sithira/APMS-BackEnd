@@ -85,7 +85,7 @@ class ProjectController
 		const project = request.post().project;
 		
 		// update the project instance from the request body
-		project.merge(request.except(['project', 'relations']));
+		project.merge(request.except(['client', 'manager', 'team']));
 		
 		// save the project
 		await project.save();

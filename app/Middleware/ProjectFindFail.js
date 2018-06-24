@@ -2,6 +2,8 @@
 
 const Project = use("App/Models/Project");
 
+const _ = use('underscore');
+
 class ProjectFindFail
 {
 	
@@ -10,9 +12,9 @@ class ProjectFindFail
 		
 		const {
 			forceDestroy = "false",
-			relations = "false",
+			relations = "false"
 		} = request.all();
-		
+
 		let project = null;
 		
 		if (relations === "true")
@@ -33,7 +35,7 @@ class ProjectFindFail
 				message: `Project with the id: ${params.projectId} could not be found !`
 			});
 		}
-		
+
 		// attach the project object to the body.
 		request.body.project = project;
 		
