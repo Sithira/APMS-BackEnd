@@ -19,8 +19,8 @@ module.exports = {
     // security definition config
     securityDefinitions: {
         ApiKey: {
-            description: 'ApiKey description',
-            name: 'Authorization'
+            description: 'JWT Token',
+            name: 'Bearer '
         },
 
         // OAuth2 configuration
@@ -49,6 +49,6 @@ module.exports = {
     ],
 
     definitions: [
-        'docs/models/*.yml'
+    
     ]
 };

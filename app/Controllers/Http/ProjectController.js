@@ -8,6 +8,7 @@ class ProjectController
 	/**
 	 * Get all the projects
 	 *
+	 *
 	 * @param request
 	 * @param response
 	 * @returns {Promise<*|{limit, strict, types}|Promise<any>>}

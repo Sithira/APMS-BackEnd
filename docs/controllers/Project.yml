@@ -25,4 +25,4 @@
       200:
         description: users
         schema:
-          $ref: '#/definitions/Project'
+          $ref: '#/definition/Project.yml'

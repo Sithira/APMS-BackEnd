@@ -4,7 +4,25 @@ const Hash = use('Hash'),
 	Model = use('Model'),
 	Team = use('App/Models/Team');
 
-
+/**
+ *  @swagger
+ *  definitions:
+ *    User:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: uint
+ *        username:
+ *          type: string
+ *        email:
+ *          type: string
+ *        password:
+ *          type: string
+ *      required:
+ *        - username
+ *        - email
+ *        - password
+ */
 class User extends Model
 {
 	
