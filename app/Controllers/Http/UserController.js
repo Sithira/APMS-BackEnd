@@ -149,6 +149,28 @@ class UserController
 		
 		
 	}
+	
+	/**
+	 * Get all the managers from the database
+	 *
+	 * @param request
+	 * @param response
+	 * @return {Promise<*>}
+	 */
+	async getType({request, response})
+	{
+		const {
+			type = "client"
+		} = request.all();
+		
+		const users = await User.query().where('type', type).fetch();
+		
+		return response.status(200).json({
+			status: "OK",
+			data: users
+		});
+	}
+	
 }
 
 module.exports = UserController;

@@ -19,7 +19,7 @@ class UserStoreUpdate
 		return {
 			email: 'required|email',
 			name: 'required|min:3',
-			password: 'required|min:8',
+			//password: 'required|min:8',
 			type: 'in:client,developer,manager,admin'
 		}
 	}

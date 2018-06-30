@@ -20,10 +20,7 @@ class ProjectFindFailSoftDeleted
 		
 		// get the authenticated user
 		let user = await auth.getUser();
-		
-		// wait for the projects to load
-		await user.load('team.projects');
-		
+
 		// query all relationships if the user is an admin.
 		if (user.type.toString() === "admin")
 		{
@@ -35,8 +32,43 @@ class ProjectFindFailSoftDeleted
 		}
 		else
 		{
-			// fetch the projects that are belogn to a user with auth
-			projects = user.projects().fetch().toJSON();
+			// wait for the projects to load
+			await user.loadMany(['team.projects', 'owned_projects', 'managing_projects']);
+			
+			projects = {};
+			
+			let team = await user.team().fetch();
+			
+			// check for the team existence
+			if (team)
+			{
+				// fetch the projects from team,
+				let working_projects =  await team.projects().fetch();
+				
+				// add to the object if any rows exists
+				if (working_projects.rows)
+				{
+					projects.working_projects = working_projects.toJSON();
+				}
+			}
+			
+			// lazy load owned projects
+			let owned_projects = await user.owned_projects().fetch();
+			
+			// add only if any projects exists
+			if (owned_projects.rows)
+			{
+				projects.owned_project = owned_projects.toJSON();
+			}
+			
+			// lazy load managing projects
+			let managing_projects = await user.managing_projects().fetch();
+			
+			// add only if we have any results
+			if (managing_projects.rows)
+			{
+				projects.managing_projects = managing_projects.toJSON();
+			}
 		}
 		
 		// show all records ( soft deleted )
@@ -67,7 +99,7 @@ class ProjectFindFailSoftDeleted
 			
 		}
 		
-		
+		// add to the body
 		request.body.projects = projects;
 		
 		await next()

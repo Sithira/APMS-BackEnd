@@ -15,7 +15,6 @@ class VerifyAuthentication
 			// if the user isn't an admin, check for the rest
 			if (user.type !== "admin")
 			{
-				console.log("WFT ??");
 				
 				// if we have a prop for admin
 				if (props.indexOf("admin") !== -1)

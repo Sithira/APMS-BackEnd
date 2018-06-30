@@ -70,6 +70,8 @@ Route.get('check', 'Auth/LoginController.check');
 Route.group(() =>
 {
 	
+	Route.get('/get-type', 'UserController.getType');
+	
 	// get all the users
 	Route.get('/', 'UserController.index')
 		.middleware(['userFindFailSoftDeleted']);
@@ -91,7 +93,6 @@ Route.group(() =>
 	Route.delete('/:userId', 'UserController.destroy')
 		.middleware(['userFindFail']);
 	
-	
 }).prefix(BaseUrl + '/users')
 	.middleware(['auth:admin']);
 
@@ -103,7 +104,7 @@ Route.group(() =>
 	
 	// get all the projects
 	Route.get('/', 'ProjectController.index')
-		.middleware(['projectFindFailSoftDeleted', 'auth:admin,manager,developer']);
+		.middleware(['projectFindFailSoftDeleted']);
 	
 	// get a single project
 	Route.get('/:projectId', 'ProjectController.show')
